@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="onboarding-container">
+    <div class="hero-section">
+        <div class="hero-top">
+            <div class="brand-block">
+                <img src="{{ url_for('static', filename='icon.png') }}" width="32" height="32" alt="Logo">
+                <h2 class="brand-title">Taha NutriCare</h2>
+            </div>
+            <a href="#" onclick="showLogin()" class="btn btn-primary">Connexion</a>
+        </div>
+
+        <h1 class="hero-title">Consultation en Ligne</h1>
+        <p class="hero-subtitle">
+            Déterminez votre objectif nutritionnel et commencez votre voyage santé.
+        </p>
+    </div>
+
+    <div id="step-1" style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 2rem; align-items: stretch; margin-bottom: 2rem;">
+        
+        <!-- Objective Slider (Left) -->
+        <div class="step-card carousel-container" style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 250px; text-align: center; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); cursor: pointer;" id="slider-card" onclick="selectCurrentObjective()">
+            
+            <button onclick="event.stopPropagation(); prevSlide()" id="btn-prev" class="slider-btn" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); background: white; border: 1px solid var(--border); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; z-index: 10; cursor: pointer; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                <img src="https://api.iconify.design/lucide:chevron-left.svg" width="24" height="24">
+            </button>
+            <button onclick="event.stopPropagation(); nextSlide()" id="btn-next" class="slider-btn" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: white; border: 1px solid var(--border); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; z-index: 10; cursor: pointer; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                <img src="https://api.iconify.design/lucide:chevron-right.svg" width="24" height="24">
+            </button>
+
+            <!-- Slide 0 -->
+            <div id="slide-0" class="objective-slide" style="display: block; width: 100%;" data-value="Perte de Poids">
+                <div class="objective-emoji" style="font-size: 3rem; margin-bottom: 1rem;">⚖️ 🍎</div>
+                <h3 class="objective-title objective-green" style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800;">Perte de Poids</h3>
+                <p class="objective-text" style="color: var(--text-muted); font-size: 1rem;">Objectif : Perdre du poids</p>
+                <div style="margin-top: 1.5rem;"><span class="btn btn-primary" style="padding: 0.5rem 1.5rem; border-radius: 2rem; font-size: 0.85rem;">Choisir</span></div>
+            </div>
+
+            <!-- Slide 1 -->
+            <div id="slide-1" class="objective-slide" style="display: none; width: 100%;" data-value="Prise de Masse">
+                <div class="objective-emoji" style="font-size: 3rem; margin-bottom: 1rem;">🏋️‍♂️ 🥜</div>
+                <h3 class="objective-title objective-blue" style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--accent-blue); font-weight: 800;">Prise de Masse</h3>
+                <p class="objective-text" style="color: var(--text-muted); font-size: 1rem;">Objectif : Prendre de la masse</p>
+                <div style="margin-top: 1.5rem;"><span class="btn btn-primary" style="padding: 0.5rem 1.5rem; border-radius: 2rem; font-size: 0.85rem; background: var(--accent-blue);">Choisir</span></div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div id="slide-2" class="objective-slide" style="display: none; width: 100%;" data-value="Manger Sainement">
+                <div class="objective-emoji" style="font-size: 3rem; margin-bottom: 1rem;">🥗 🍅</div>
+                <h3 class="objective-title objective-secondary" style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--secondary); font-weight: 800;">Manger Sainement</h3>
+                <p class="objective-text" style="color: var(--text-muted); font-size: 1rem;">Objectif : Améliorer son alimentation</p>
+                <div style="margin-top: 1.5rem;"><span class="btn btn-primary" style="padding: 0.5rem 1.5rem; border-radius: 2rem; font-size: 0.85rem; background: var(--secondary);">Choisir</span></div>
+            </div>
+            
+            <div style="position: absolute; bottom: 1rem; display: flex; gap: 0.5rem; justify-content: center; width: 100%;">
+                <div id="dot-0" style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary);"></div>
+                <div id="dot-1" style="width: 8px; height: 8px; border-radius: 50%; background: #e2e8f0;"></div>
+                <div id="dot-2" style="width: 8px; height: 8px; border-radius: 50%; background: #e2e8f0;"></div>
+            </div>
+        </div>
+
+        <!-- Right Banner -->
+        <div class="banner-right" style="border-radius: 1.5rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; background: #f8fafc; overflow: hidden;">
+            <img src="{{ url_for('static', filename='doctor.png') }}" style="width: 100%; height: 100%; object-fit: cover; min-height: 250px;" alt="Chat avec Dr. Taha" onerror="this.src='https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=800';">
+        </div>
+    </div>
+
+    <div id="auth-section" class="step-card auth-card" style="display: none;">
+        <div id="login-form">
+            <h2 class="auth-title">Heureux de vous revoir</h2>
+            <form action="{{ url_for('login') }}" method="POST">
+                <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+                <input type="password" name="password" placeholder="Mot de passe" required>
+                <button type="submit" class="btn btn-primary auth-btn">Se connecter</button>
+            </form>
+            <p class="auth-switch">
+                Pas encore de compte ?
+                <a href="#" onclick="showRegister()" class="auth-link">S'inscrire</a>
+            </p>
+        </div>
+
+        <div id="register-form" style="display: none;">
+            <h2 class="auth-title">Créer un profil</h2>
+            <form action="{{ url_for('register') }}" method="POST">
+                <input type="text" name="full_name" placeholder="Nom complet" required>
+                <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="text" name="phone" placeholder="Numéro de téléphone">
+                <input type="password" name="password" placeholder="Mot de passe" required>
+                <button type="submit" class="btn btn-primary auth-btn">Commencer</button>
+            </form>
+            <p class="auth-switch">
+                Déjà inscrit ?
+                <a href="#" onclick="showLogin()" class="auth-link">Se connecter</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const totalSlides = 3;
+
+    function updateSlider() {
+        for(let i=0; i<totalSlides; i++) {
+            document.getElementById('slide-' + i).style.display = 'none';
+            document.getElementById('dot-' + i).style.background = '#e2e8f0';
+        }
+        document.getElementById('slide-' + currentSlide).style.display = 'block';
+        
+        let color = 'var(--primary)';
+        if(currentSlide === 1) color = 'var(--accent-blue)';
+        if(currentSlide === 2) color = 'var(--secondary)';
+        document.getElementById('dot-' + currentSlide).style.background = color;
+    }
+
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateSlider();
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateSlider();
+    }
+
+    function selectCurrentObjective() {
+        const objText = document.getElementById('slide-' + currentSlide).getAttribute('data-value');
+        selectObjective(objText);
+    }
+
+    function selectObjective(obj) {
+        localStorage.setItem('temp_objective', obj);
+        showRegister();
+    }
+
+    function showRegister() {
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('auth-section').style.display = 'block';
+        document.getElementById('login-form').style.display = 'none';
+        document.getElementById('register-form').style.display = 'block';
+    }
+
+    function showLogin() {
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('auth-section').style.display = 'block';
+        document.getElementById('register-form').style.display = 'none';
+        document.getElementById('login-form').style.display = 'block';
+    }
+</script>
+{% endblock %}

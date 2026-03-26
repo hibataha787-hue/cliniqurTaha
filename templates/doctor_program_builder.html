@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-end;">
+    <div>
+        <a href="{{ url_for('patient_details', patient_id=patient.id) }}" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem; display: inline-block;">← Retour au dossier</a>
+        <h1 style="font-size: 1.75rem; font-weight: 800; color: var(--text-dark);">Programme de {{ patient.full_name or patient.username }}</h1>
+        <p style="color: var(--text-muted);">Construisez le plan nutritionnel semaine type du patient.</p>
+    </div>
+</div>
+
+<div class="grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+    <!-- Formulaire d'ajout -->
+    <div class="card">
+        <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">Ajouter un repas au plan</h3>
+        
+        <form id="mealForm" data-patient-id="{{ patient.id }}" onsubmit="event.preventDefault(); assignMeal();">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Jour de la semaine</label>
+                    <select id="day_of_week" class="input-field" required>
+                        <option value="Lundi">Lundi</option>
+                        <option value="Mardi">Mardi</option>
+                        <option value="Mercredi">Mercredi</option>
+                        <option value="Jeudi">Jeudi</option>
+                        <option value="Vendredi">Vendredi</option>
+                        <option value="Samedi">Samedi</option>
+                        <option value="Dimanche">Dimanche</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Type de Repas</label>
+                    <select id="meal_type" class="input-field" required>
+                        <option value="Petit-déjeuner">Petit-déjeuner</option>
+                        <option value="Déjeuner">Déjeuner</option>
+                        <option value="Collation">Collation</option>
+                        <option value="Dîner">Dîner</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Titre du repas</label>
+                <input type="text" id="title" class="input-field" placeholder="Ex: Avocado Toast & Œuf Poché" required>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Ingrédients & Recette (Description)</label>
+                <textarea id="ingredients" class="input-field" rows="4" placeholder="Détaillez les ingrédients..." required></textarea>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Photo (URL optionnelle)</label>
+                <input type="url" id="photo_url" class="input-field" placeholder="https://...">
+            </div>
+
+            <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--text-dark);">Macronutriments</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                    <label style="font-size: 0.75rem; color: var(--text-muted);">Calories (kcal)</label>
+                    <input type="number" id="calories" class="input-field" value="0">
+                </div>
+                <div>
+                    <label style="font-size: 0.75rem; color: var(--text-muted);">Protéines (g)</label>
+                    <input type="number" id="proteins" class="input-field" value="0">
+                </div>
+                <div>
+                    <label style="font-size: 0.75rem; color: var(--text-muted);">Glucides (g)</label>
+                    <input type="number" id="carbs" class="input-field" value="0">
+                </div>
+                <div>
+                    <label style="font-size: 0.75rem; color: var(--text-muted);">Lipides (g)</label>
+                    <input type="number" id="fats" class="input-field" value="0">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; font-weight: 800;">
+                <img src="https://api.iconify.design/lucide:plus.svg?color=white" width="20" height="20" style="margin-right: 0.5rem; vertical-align: middle;">
+                Assigner ce repas
+            </button>
+        </form>
+    </div>
+
+    <!-- Aperçu du programme -->
+    <div class="card" style="background: #f8fafc;">
+        <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">Aperçu du Programme Hebdomadaire</h3>
+        
+        <div style="max-height: 800px; overflow-y: auto;">
+            {% set days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'] %}
+            {% for day in days %}
+                <div style="margin-bottom: 2rem;">
+                    <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--primary); margin-bottom: 1rem; text-transform: uppercase;">{{ day }}</h4>
+                    {% set day_meals = assigned_meals | selectattr('day_of_week', 'equalto', day) | list %}
+                    
+                    {% if day_meals|length == 0 %}
+                        <div style="background: white; border: 1px dashed var(--border); border-radius: 12px; padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+                            Aucun repas assigné pour ce jour.
+                        </div>
+                    {% else %}
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        {% for meal in day_meals %}
+                            <div style="background: white; border-radius: 12px; padding: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; gap: 1rem; align-items: flex-start; border: 1px solid var(--border);">
+                                {% if meal.photo_url %}
+                                <div style="width: 60px; height: 60px; border-radius: 8px; overflow: hidden; flex-shrink: 0;">
+                                    <img src="{{ meal.photo_url }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                {% else %}
+                                <div style="width: 60px; height: 60px; border-radius: 8px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <img src="https://api.iconify.design/lucide:utensils-crosscrossed.svg?color=%2394a3b8" width="24" height="24">
+                                </div>
+                                {% endif %}
+                                <div style="flex: 1;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                                        <span style="font-size: 0.75rem; font-weight: 800; color: var(--primary); text-transform: uppercase;">{{ meal.meal_type }}</span>
+                                        <button onclick="deleteMeal({{ meal.id }})" style="background: none; border: none; cursor: pointer; color: #ef4444;" title="Supprimer">
+                                            <img src="https://api.iconify.design/lucide:trash-2.svg?color=%23ef4444" width="16" height="16">
+                                        </button>
+                                    </div>
+                                    <div style="font-weight: 800; font-size: 1rem; color: var(--text-dark); margin-bottom: 0.25rem;">{{ meal.title }}</div>
+                                    <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                        {{ meal.ingredients }}
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem; font-size: 0.75rem; font-weight: 600;">
+                                        <span style="background: #f1f5f9; color: var(--text-dark); padding: 0.15rem 0.4rem; border-radius: 4px;">{{ meal.calories }} kcal</span>
+                                        <span style="background: #f1f5f9; color: var(--accent-blue); padding: 0.15rem 0.4rem; border-radius: 4px;">{{ meal.proteins }}g Prot</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+function assignMeal() {
+    const mealForm = document.getElementById('mealForm');
+    const data = {
+        patient_id: parseInt(mealForm.getAttribute('data-patient-id')),
+        day_of_week: document.getElementById('day_of_week').value,
+        meal_type: document.getElementById('meal_type').value,
+        title: document.getElementById('title').value,
+        ingredients: document.getElementById('ingredients').value,
+        photo_url: document.getElementById('photo_url').value,
+        calories: parseInt(document.getElementById('calories').value) || 0,
+        proteins: parseInt(document.getElementById('proteins').value) || 0,
+        carbs: parseInt(document.getElementById('carbs').value) || 0,
+        fats: parseInt(document.getElementById('fats').value) || 0
+    };
+
+    fetch('/api/doctor/assign_meal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    }).then(r => r.json()).then(res => {
+        if(res.status === 'success') location.reload();
+    });
+}
+
+function deleteMeal(id) {
+    if(!confirm("Supprimer ce repas du programme ?")) return;
+    fetch('/api/doctor/delete_assigned_meal/' + id, { method: 'DELETE' })
+    .then(r => r.json()).then(res => {
+        if(res.status === 'success') location.reload();
+    });
+}
+</script>
+{% endblock %}

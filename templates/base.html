@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CliniAque - Nutrition Clinic</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body::before {
+            background-image: url("{{ url_for('static', filename='background.png') }}") !important;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        {% if current_user.is_authenticated and current_user.role %}
+      <aside class="sidebar">
+    <div class="logo-section">
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <img src="{{ url_for('static', filename='icon.png') }}" width="32" height="32" alt="Logo">
+            Taha NutriCare
+        </div>
+    </div>
+    
+    <nav class="nav-menu">
+        <a href="{{ url_for('patient_dashboard' if current_user.role == 'patient' else 'doctor_dashboard') }}" class="nav-item">
+            <img src="https://api.iconify.design/lucide:layout-dashboard.svg" width="20" height="20">
+            Tableau de bord
+        </a>
+        {% if current_user.role == 'patient' %}
+        <a href="{{ url_for('patient_meals') }}" class="nav-item">
+            <img src="https://api.iconify.design/lucide:utensils.svg" width="20" height="20">
+            Mes Repas
+        </a>
+        <a href="{{ url_for('patient_program') }}" class="nav-item">
+            <img src="https://api.iconify.design/lucide:clipboard-list.svg" width="20" height="20">
+            Conseils
+        </a>
+        {% endif %}
+        
+        <a href="{{ url_for('messages') }}" class="nav-item">
+            <img src="https://api.iconify.design/lucide:message-square.svg" width="20" height="20">
+            Messages
+            {% set unread = current_user.received_messages | selectattr('is_read', 'equalto', False) | list | length %}
+            {% if unread > 0 %}
+            <span style="background: var(--primary); color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.65rem; display: flex; align-items: center; justify-content: center; margin-left: auto;">{{ unread }}</span>
+            {% endif %}
+        </a>
+        {% if current_user.role == 'patient' %}
+        <a href="{{ url_for('patient_profile') }}" class="nav-item">
+            <img src="https://api.iconify.design/lucide:user.svg" width="20" height="20">
+            Profil
+        </a>
+        {% endif %}
+    </nav>
+
+    <div style="margin-top: auto; padding-top: 2rem; border-top: 1px solid var(--border);">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center;">
+                <img src="https://api.iconify.design/lucide:user.svg" width="20" height="20">
+            </div>
+            <div>
+                <div style="font-weight: 700; font-size: 0.9rem;">{{ current_user.full_name }}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">{{ current_user.role|capitalize }}</div>
+            </div>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn btn-primary" style="width: 100%; display: block; text-align: center; text-decoration: none;">Déconnexion</a>
+    </div>
+</aside>
+        {% endif %}
+
+        <main class="main-content {% if current_user.is_authenticated and current_user.role %}with-sidebar{% endif %}">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="card" style="padding: 1rem; margin-bottom: 2rem; border-left: 4px solid var(--primary); background: #f0fdf4;">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

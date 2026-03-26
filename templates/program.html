@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1 style="font-size: 1.75rem; font-weight: 800;">Conseils Nutritionnel</h1>
+    <p style="color: var(--text-muted);">Consultez votre plan personnalisé et les recommandations de votre nutritionniste.</p>
+</div>
+
+<div class="grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+    <div class="plan-details">
+        <div class="card" style="min-height: 400px; padding: 2rem;">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">
+                <img src="https://api.iconify.design/lucide:clipboard-list.svg?color=%2322c55e" width="32" height="32">
+                <h2 style="font-weight: 800; color: var(--text-dark);">Détails</h2>
+            </div>
+
+            {% if plan %}
+            <div style="line-height: 1.8; color: var(--text-dark); white-space: pre-wrap;">
+                {{ plan.program_details }}
+            </div>
+            {% else %}
+            <div style="text-align: center; padding: 4rem; color: var(--text-muted);">
+                <img src="https://api.iconify.design/lucide:clock.svg?color=%23CBD5E1" width="48" height="48" style="margin-bottom: 1rem;">
+                <p>Votre nutritionniste n'a pas encore publié votre programme détaillé.</p>
+                <p style="font-size: 0.9rem;">Il apparaîtra ici dès qu'il sera prêt.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="sidebar-info">
+        <div class="card" style="background: var(--text-dark); color: white; margin-bottom: 1.5rem;">
+            <h3 style="margin-bottom: 1.5rem;">Votre Consultant</h3>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center;">
+                    <img src="https://api.iconify.design/lucide:user.svg?color=white" width="24" height="24">
+                </div>
+                <div>
+                    <div style="font-weight: 700;">Dr. Taha</div>
+                    <div style="font-size: 0.8rem; color: #94a3b8;">Expert Nutritionniste</div>
+                </div>
+            </div>
+            <a href="{{ url_for('messages') }}" class="btn btn-primary" style="width: 100%; text-align: center; text-decoration: none;">Envoyer un message</a>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom: 1.25rem;">Objectifs du Plan</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2322c55e" width="20" height="20">
+                    <span style="font-size: 0.9rem;">Stabilisation du poids</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2322c55e" width="20" height="20">
+                    <span style="font-size: 0.9rem;">Rééquilibrage métabolique</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2322c55e" width="20" height="20">
+                    <span style="font-size: 0.9rem;">Amélioration de l'énergie</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

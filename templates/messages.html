@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div >
+    <h1 >Messagerie et Suivi</h1>
+    <p >Gérez vos échanges cliniques et le suivi nutritionnel en temps réel.</p>
+</div>
+
+<div class="messenger-container" id="chatContainer" data-contact-id="{{ contact.id if contact else 'null' }}" >
+    <div class="contacts-sidebar">
+        <div class="search-bar-chat">
+            <input type="text" placeholder="Rechercher un message..." >
+        </div>
+        <div class="contact-list">
+            {% for c in contacts %}
+            <div class="contact-item {{ 'active' if contact and c.id == contact.id else '' }}" onclick="window.location.href='{{ url_for('messages', contact_id=c.id) }}'">
+                <div >
+                    <div style="width: 45px; height: 45px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center;">
+                        <img src="https://api.iconify.design/lucide:user.svg?color=white" width="24" height="24">
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                        <span style="font-weight: 800; font-size: 0.95rem;">{{ c.full_name or c.username }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if not contacts %}
+            <div style="padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+                Aucun patient inscrit pour le moment.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="chat-window" style="height: 460px;">
+        <header class="chat-header">
+            {% if contact %}
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center;">
+                    <img src="https://api.iconify.design/lucide:user.svg?color=white" width="20" height="20">
+                </div>
+                <div>
+                    <div style="font-weight: 800; font-size: 1rem;">{{ contact.full_name or contact.username }}</div>
+                    {% if contact.role == 'doctor' %}
+                    <div style="font-size: 0.75rem; color: #22c55e; font-weight: 600;">EN LIGNE</div>
+                    {% else %}
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">PATIENT</div>
+                    {% endif %}
+                </div>
+            </div>
+         
+            {% endif %}
+        </header>
+
+        <div class="chat-messages" id="chatMessages">
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <span style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); background: #f1f5f9; padding: 0.25rem 0.75rem; border-radius: 1rem;">AUJOURD'HUI</span>
+            </div>
+
+            {% for msg in messages %}
+            <div class="message-bubble {{ 'message-sent' if msg.sender_id == current_user.id else 'message-received' }}">
+                {{ msg.content }}
+                <div style="font-size: 0.65rem; margin-top: 0.25rem; opacity: 0.8; text-align: right;">
+                    {{ msg.timestamp.strftime('%H:%M') }}
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if not messages %}
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; flex-direction: column; color: var(--text-muted);">
+                <img src="https://api.iconify.design/lucide:message-square.svg?color=%23CBD5E1" width="48" height="48" style="margin-bottom: 1rem;">
+                <p>Démarrez la discussion avec votre nutritionniste.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="chat-input-area">
+           
+            <input type="text" id="msgInput" placeholder="Écrivez votre message..." style="flex: 1; border: none; background: transparent; padding: 0.5rem; outline: none; margin-bottom: 0;">
+            <button onclick="sendMessage()" style="background: var(--primary); border: none; padding: 0.6rem; border-radius: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <img src="https://api.iconify.design/lucide:send.svg?color=white" width="20" height="20">
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function sendMessage() {
+    const input = document.getElementById('msgInput');
+    const content = input.value.trim();
+    if (!content) return;
+    
+    let receiverId = document.getElementById('chatContainer').getAttribute('data-contact-id');
+    if (receiverId === 'null') {
+        receiverId = null;
+    } else {
+        receiverId = parseInt(receiverId);
+    }
+
+    fetch('/api/send_message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            receiver_id: receiverId,
+            content: content
+        })
+    }).then(r => r.json()).then(data => {
+        if (data.status === 'success') {
+            location.reload();
+        }
+    });
+}
+
+// Scroll to bottom
+const chatMessages = document.getElementById('chatMessages');
+chatMessages.scrollTop = chatMessages.scrollHeight;
+</script>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="onboarding-container">
+    <div class="step-card" style="text-align: left; max-width: 600px; margin: 0 auto;">
+        <h2 style="margin-bottom: 0.5rem; color: var(--primary);">Parlez-nous de vous</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">Ces informations aideront le Dr. Taha à personnaliser votre programme.</p>
+        
+        <form action="{{ url_for('patient_profile') if edit_mode else url_for('onboarding') }}" method="POST">
+            {% if edit_mode %}
+            <div style="margin-bottom: 1rem;">
+                <label style="font-size: 0.8rem; font-weight: 600;">Objectif de santé</label>
+                <input type="text" id="objective_input" class="input-field" name="objective" value="{{ profile.objective or '' }}" required>
+            </div>
+            {% else %}
+            <input type="hidden" id="objective_input" name="objective">
+            {% endif %}
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 600;">Âge</label>
+                    <input type="number" name="age" class="input-field" placeholder="Ex: 25" value="{{ profile.age if edit_mode else '' }}" required>
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 600;">Genre</label>
+                    <select name="gender" class="input-field">
+                        <option value="Homme" {{ 'selected' if edit_mode and profile.gender == 'Homme' else '' }}>Homme</option>
+                        <option value="Femme" {{ 'selected' if edit_mode and profile.gender == 'Femme' else '' }}>Femme</option>
+                        <option value="Autre" {{ 'selected' if edit_mode and profile.gender == 'Autre' else '' }}>Autre</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 600;">Poids actuel (kg)</label>
+                    <input type="number" step="0.1" name="current_weight" class="input-field" placeholder="70.5" value="{{ profile.current_weight if edit_mode else '' }}" required>
+                </div>
+                <div>
+                    <label style="font-size: 0.8rem; font-weight: 600;">Poids cible (kg)</label>
+                    <input type="number" step="0.1" name="target_weight" class="input-field" placeholder="65.0" value="{{ profile.target_weight if edit_mode else '' }}">
+                </div>
+            </div>
+
+            <div>
+                <label style="font-size: 0.8rem; font-weight: 600;">Taille (cm)</label>
+                <input type="number" name="height" class="input-field" placeholder="175" value="{{ profile.height if edit_mode else '' }}" required>
+            </div>
+
+            <div>
+                <label style="font-size: 0.8rem; font-weight: 600;">Niveau d'activité</label>
+                <select name="activity_level" class="input-field">
+                    <option value="Sédentaire" {{ 'selected' if edit_mode and profile.activity_level == 'Sédentaire' else '' }}>Sédentaire (Bureau, peu de sport)</option>
+                    <option value="Légèrement actif" {{ 'selected' if edit_mode and profile.activity_level == 'Légèrement actif' else '' }}>Légèrement actif (1-3 j/semaine)</option>
+                    <option value="Modérément actif" {{ 'selected' if edit_mode and profile.activity_level == 'Modérément actif' else '' }}>Modérément actif (3-5 j/semaine)</option>
+                    <option value="Très actif" {{ 'selected' if edit_mode and profile.activity_level == 'Très actif' else '' }}>Très actif (6-7 j/semaine)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">{{ 'Mettre à jour mon profil' if edit_mode else "Terminer l'inscription" }}</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const obj = localStorage.getItem('temp_objective');
+    if (obj) {
+        document.getElementById('objective_input').value = obj;
+    }
+});
+</script>
+{% endblock %}
