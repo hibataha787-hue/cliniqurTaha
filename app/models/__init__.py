@@ -28,6 +28,18 @@ class PatientProfile(db.Model):
     objective = db.Column(db.String(50)) # 'Perte de Poids', 'Prise de Masse', 'Manger Sainement'
     activity_level = db.Column(db.String(50))
     health_metrics = db.Column(db.Text) # JSON string
+    
+    # Nouveaux champs d'onboarding
+    profession = db.Column(db.String(100))
+    ville = db.Column(db.String(100))
+    mode_de_vie = db.Column(db.String(100))
+    preference = db.Column(db.String(255))
+    liked_recipes = db.Column(db.Text)
+    disliked_recipes = db.Column(db.Text)
+    meals_per_day = db.Column(db.Integer)
+    waist_size = db.Column(db.Float)
+    allergies = db.Column(db.Text)
+    remarks = db.Column(db.Text)
 
 class MealLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)

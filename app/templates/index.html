@@ -3,158 +3,763 @@
 {% block content %}
 <div class="onboarding-container">
     <div class="hero-section">
-        <div class="hero-top">
+        <div class="hero-top fixed-header" style="
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+">
             <div class="brand-block">
                 <img src="{{ url_for('static', filename='icon.png') }}" width="32" height="32" alt="Logo">
                 <h2 class="brand-title">Taha NutriCare</h2>
             </div>
-            <a href="#" onclick="showLogin()" class="btn btn-primary">Connexion</a>
+
+            <div style="
+                display: flex;
+                align-items: center;
+                gap: 1.5rem;
+                flex-wrap: wrap;
+            ">
+                <nav class="top-nav-links" style="
+                    display: flex;
+                    align-items: center;
+                    gap: 1.25rem;
+                    flex-wrap: wrap;
+                ">
+                    <a href="#accueil"
+                        style="color: var(--text-dark); font-weight: 600; text-decoration: none;">Accueil</a>
+                    <a href="#services"
+                        style="color: var(--text-dark); font-weight: 600; text-decoration: none;">Offres</a>
+                    <a href="#contact"
+                        style="color: var(--text-dark); font-weight: 600; text-decoration: none;">Contact</a>
+                </nav>
+
+                <a href="#auth-section" onclick="showLogin()" class="btn btn-primary">Connexion</a>
+            </div>
         </div>
 
-        <h1 class="hero-title">Consultation en Ligne</h1>
-        <p class="hero-subtitle">
-            Déterminez votre objectif nutritionnel et commencez votre voyage santé.
+        <section id="accueil" style="
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.75rem;
+            min-height: 460px;
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            background:
+                linear-gradient(90deg, rgba(7,18,10,0.88) 0%, rgba(7,18,10,0.72) 45%, rgba(7,18,10,0.32) 100%),
+                url('https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1400&q=80') center/cover no-repeat;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.12);
+            margin-bottom: 2rem;
+        ">
+            <div style="max-width: 560px; color: white;">
+                <h1 style="
+                    font-size: clamp(2.2rem, 5vw, 4rem);
+                    line-height: 1;
+                    font-weight: 900;
+                    margin-bottom: 1rem;
+                    color: white;
+                ">
+                    Votre santé, notre <span style="color: #39ff14;">priorité</span>
+                </h1>
+
+                <p style="
+                    font-size: 1.05rem;
+                    line-height: 1.7;
+                    color: rgba(255,255,255,0.92);
+                    margin-bottom: 1.75rem;
+                    max-width: 500px;
+                ">
+                    Accompagnement nutritionnel personnalisé pour transformer votre vie durablement avec une approche
+                    naturelle, humaine et bienveillante.
+                </p>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <a href="#register-section" onclick="showRegister()" class="btn btn-primary" style="padding: 0.9rem 1.5rem;">
+                        Prendre rendez-vous
+                    </a>
+                    <a href="#services" class="btn" style="
+                        padding: 0.9rem 1.5rem;
+                        background: rgba(255,255,255,0.12);
+                        color: white;
+                        border: 1px solid rgba(255,255,255,0.2);
+                        backdrop-filter: blur(8px);
+                    ">
+                        Découvrir nos offres
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <section id="services" style="margin-bottom: 3rem;">
+        <div style="margin-bottom: 2rem;">
+            <h2 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 0.75rem; color: var(--text-dark);">
+                Nos Services
+            </h2>
+            <p style="max-width: 680px; color: var(--text-muted); line-height: 1.7;">
+                Des solutions adaptées à vos besoins spécifiques pour atteindre vos objectifs de bien-être à chaque
+                étape de votre vie.
+            </p>
+        </div>
+
+        <div class="services-grid-custom" style="
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        ">
+            <div class="card" style="padding: 1.75rem; border-radius: 1.25rem;">
+                <div style="
+                    width: 46px; height: 46px;
+                    display: flex; align-items: center; justify-content: center;
+                    border-radius: 0.9rem;
+                    background: #effeea;
+                    font-size: 1.2rem;
+                    margin-bottom: 1rem;
+                ">✚</div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.75rem;">Consultations</h3>
+                <p style="color: var(--text-muted); line-height: 1.7;">
+                    Bilans complets et conseils experts pour faire le point sur votre nutrition et définir vos objectifs
+                    personnalisés.
+                </p>
+            </div>
+
+            <div class="card" style="padding: 1.75rem; border-radius: 1.25rem;">
+                <div style="
+                    width: 46px; height: 46px;
+                    display: flex; align-items: center; justify-content: center;
+                    border-radius: 0.9rem;
+                    background: #effeea;
+                    font-size: 1.2rem;
+                    margin-bottom: 1rem;
+                ">🗓</div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.75rem;">Planning alimentaire</h3>
+                <p style="color: var(--text-muted); line-height: 1.7;">
+                    Menus sur mesure élaborés selon vos goûts, vos intolérances et votre mode de vie pour un plaisir
+                    quotidien.
+                </p>
+            </div>
+
+            <div class="card" style="padding: 1.75rem; border-radius: 1.25rem;">
+                <div style="
+                    width: 46px; height: 46px;
+                    display: flex; align-items: center; justify-content: center;
+                    border-radius: 0.9rem;
+                    background: #effeea;
+                    font-size: 1.2rem;
+                    margin-bottom: 1rem;
+                ">↗</div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.75rem;">Suivi personnalisé</h3>
+                <p style="color: var(--text-muted); line-height: 1.7;">
+                    Un accompagnement régulier pour garder la motivation, ajuster votre programme et garantir des
+                    résultats durables.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section style="margin-bottom: 3rem;">
+        <div class="why-grid-custom" style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.12);
+        ">
+            <div style="position: relative;">
+                <img src="{{ url_for('static', filename='docor.png') }}" alt="Nutritionniste" style="
+                        width: 100%;
+                        height: 100%;
+                        min-height: 520px;
+                        object-fit: cover;
+                        border-radius: 1.5rem;
+                        box-shadow: 0 20px 30px rgba(0,0,0,0.08);
+                     "
+                    onerror="this.src='https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=900&q=80';">
+
+                <div style="
+                    position: absolute;
+                    right: -10px;
+                    bottom: 18px;
+                    background: #f4f9ef;
+                    border-radius: 1rem;
+                    padding: 1rem 1.1rem;
+                    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+                ">
+                    <div style="font-size: 1.9rem; font-weight: 900; color: #1ed10a;">10+</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Années d’expertise</div>
+                </div>
+            </div>
+
+            <div>
+                <h2 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 0.75rem; color: var(--text-dark);">
+                    Pourquoi nous choisir?
+                </h2>
+                <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 1.8rem;">
+                    Nous combinons expertise scientifique et approche naturelle pour des résultats durables, sans
+                    frustration.
+                </p>
+
+                <div style="display: grid; gap: 1.35rem;">
+                    <div style="display: flex; gap: 0.9rem; align-items: flex-start;">
+                        <div style="
+                            width: 28px; height: 28px;
+                            border-radius: 999px;
+                            background: #ecffe7;
+                            color: #16a34a;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: 800;
+                            flex-shrink: 0;
+                            margin-top: 0.1rem;
+                        ">✓</div>
+                        <div>
+                            <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.25rem;">Expertise Reconnue
+                            </h4>
+                            <p style="color: var(--text-muted); line-height: 1.7;">
+                                Une équipe de nutritionnistes diplômés et passionnés à votre écoute pour une prise en
+                                charge complète.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.9rem; align-items: flex-start;">
+                        <div style="
+                            width: 28px; height: 28px;
+                            border-radius: 999px;
+                            background: #ecffe7;
+                            color: #16a34a;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: 800;
+                            flex-shrink: 0;
+                            margin-top: 0.1rem;
+                        ">✓</div>
+                        <div>
+                            <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.25rem;">Approche Naturelle
+                            </h4>
+                            <p style="color: var(--text-muted); line-height: 1.7;">
+                                Privilégier les aliments bruts, locaux et de saison pour reconnecter votre corps à la
+                                nature.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.9rem; align-items: flex-start;">
+                        <div style="
+                            width: 28px; height: 28px;
+                            border-radius: 999px;
+                            background: #ecffe7;
+                            color: #16a34a;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-weight: 800;
+                            flex-shrink: 0;
+                            margin-top: 0.1rem;
+                        ">✓</div>
+                        <div>
+                            <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.25rem;">Résultats Durables
+                            </h4>
+                            <p style="color: var(--text-muted); line-height: 1.7;">
+                                Pas de régimes restrictifs, mais un rééquilibrage profond de vos habitudes pour une vie
+                                saine.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ <section id="contact" style="margin-bottom: 2rem;">
+    <div style="
+        background: #011f05;
+        border-radius: 1.75rem;
+        padding: 3rem 1.5rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 30px rgba(0,0,0,0.08);
+    ">
+        <h2 style="
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            line-height: 1.05;
+            font-weight: 900;
+            color: #fafcfa;
+            margin-bottom: 1rem;
+        ">
+            Contactez-nous
+        </h2>
+
+        <p style="
+            max-width: 720px;
+            margin: 0 auto 1.75rem;
+            color: #dfebdf;
+            line-height: 1.7;
+            font-size: 2rem;
+        ">
+            Retrouvez notre emplacement et contactez-nous facilement.
         </p>
+
+        <div style="
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.75rem;
+    color: #f5fcf5;
+    font-weight: 600;
+    font-size: 1rem;
+">
+    <div style="display:flex; align-items:center; gap:0.6rem;">
+        <i data-lucide="map-pin" style="width:20px; height:20px; color:#d9e2d9;"></i>
+        <span>
+            Position GPS :
+            <a href="https://maps.google.com/?q=35.71298480992203,-0.6043625486008135" target="_blank" style="color: #d9e2d9; font-weight: 800; text-decoration: underline;">
+                Voir sur Google Maps
+            </a>
+        </span>
     </div>
 
-    <div id="step-1" style="display: grid; grid-template-columns: 1.6fr 1fr; gap: 2rem; align-items: stretch; margin-bottom: 2rem;">
-        
-        <!-- Objective Slider (Left) -->
-        <div class="step-card carousel-container" style="position: relative; display: flex; align-items: center; justify-content: center; min-height: 250px; text-align: center; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); cursor: pointer;" id="slider-card" onclick="selectCurrentObjective()">
-            
-            <button onclick="event.stopPropagation(); prevSlide()" id="btn-prev" class="slider-btn" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); background: white; border: 1px solid var(--border); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; z-index: 10; cursor: pointer; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
-                <img src="https://api.iconify.design/lucide:chevron-left.svg" width="24" height="24">
-            </button>
-            <button onclick="event.stopPropagation(); nextSlide()" id="btn-next" class="slider-btn" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: white; border: 1px solid var(--border); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; z-index: 10; cursor: pointer; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
-                <img src="https://api.iconify.design/lucide:chevron-right.svg" width="24" height="24">
-            </button>
-
-            <!-- Slide 0 -->
-            <div id="slide-0" class="objective-slide" style="display: block; width: 100%;" data-value="Perte de Poids">
-                <div class="objective-emoji" style="font-size: 3rem; margin-bottom: 1rem;">⚖️ 🍎</div>
-                <h3 class="objective-title objective-green" style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--primary); font-weight: 800;">Perte de Poids</h3>
-                <p class="objective-text" style="color: var(--text-muted); font-size: 1rem;">Objectif : Perdre du poids</p>
-                <div style="margin-top: 1.5rem;"><span class="btn btn-primary" style="padding: 0.5rem 1.5rem; border-radius: 2rem; font-size: 0.85rem;">Choisir</span></div>
-            </div>
-
-            <!-- Slide 1 -->
-            <div id="slide-1" class="objective-slide" style="display: none; width: 100%;" data-value="Prise de Masse">
-                <div class="objective-emoji" style="font-size: 3rem; margin-bottom: 1rem;">🏋️‍♂️ 🥜</div>
-                <h3 class="objective-title objective-blue" style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--accent-blue); font-weight: 800;">Prise de Masse</h3>
-                <p class="objective-text" style="color: var(--text-muted); font-size: 1rem;">Objectif : Prendre de la masse</p>
-                <div style="margin-top: 1.5rem;"><span class="btn btn-primary" style="padding: 0.5rem 1.5rem; border-radius: 2rem; font-size: 0.85rem; background: var(--accent-blue);">Choisir</span></div>
-            </div>
-
-            <!-- Slide 2 -->
-            <div id="slide-2" class="objective-slide" style="display: none; width: 100%;" data-value="Manger Sainement">
-                <div class="objective-emoji" style="font-size: 3rem; margin-bottom: 1rem;">🥗 🍅</div>
-                <h3 class="objective-title objective-secondary" style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--secondary); font-weight: 800;">Manger Sainement</h3>
-                <p class="objective-text" style="color: var(--text-muted); font-size: 1rem;">Objectif : Améliorer son alimentation</p>
-                <div style="margin-top: 1.5rem;"><span class="btn btn-primary" style="padding: 0.5rem 1.5rem; border-radius: 2rem; font-size: 0.85rem; background: var(--secondary);">Choisir</span></div>
-            </div>
-            
-            <div style="position: absolute; bottom: 1rem; display: flex; gap: 0.5rem; justify-content: center; width: 100%;">
-                <div id="dot-0" style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary);"></div>
-                <div id="dot-1" style="width: 8px; height: 8px; border-radius: 50%; background: #e2e8f0;"></div>
-                <div id="dot-2" style="width: 8px; height: 8px; border-radius: 50%; background: #e2e8f0;"></div>
-            </div>
-        </div>
-
-        <!-- Right Banner -->
-        <div class="banner-right" style="border-radius: 1.5rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; background: #f8fafc; overflow: hidden;">
-            <img src="{{ url_for('static', filename='doctor.png') }}" style="width: 100%; height: 100%; object-fit: cover; min-height: 250px;" alt="Chat avec Dr. Taha" onerror="this.src='https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=800';">
-        </div>
+    <div style="display:flex; align-items:center; gap:0.6rem;">
+        <i data-lucide="mail" style="width:20px; height:20px; color:#d9e2d9;"></i>
+        <span>
+            Email :
+            <a href="mailto:hanaaamira9@gmail.com" style="color: #d9e2d9; font-weight: 800; text-decoration: underline;">
+                hanaaamira9@gmail.com
+            </a>
+        </span>
     </div>
 
-    <div id="auth-section" class="step-card auth-card" style="display: none;">
-        <div id="login-form">
-            <h2 class="auth-title">Heureux de vous revoir</h2>
-            <form action="{{ url_for('auth.login') }}" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <input type="text" name="username" placeholder="Nom d'utilisateur" required>
-                <input type="password" name="password" placeholder="Mot de passe" required>
-                <button type="submit" class="btn btn-primary auth-btn">Se connecter</button>
-            </form>
-            <p class="auth-switch">
-                Pas encore de compte ?
-                <a href="#" onclick="showRegister()" class="auth-link">S'inscrire</a>
-            </p>
-        </div>
+    <div style="display:flex; align-items:center; gap:0.6rem;">
+        <i data-lucide="phone" style="width:20px; height:20px; color:#e1ece1;"></i>
+        <span>
+            Téléphone :
+            <a href="tel:0559890941" style="color: #e1ece1; font-weight: 800; text-decoration: underline;">
+                0559890941
+            </a>
+        </span>
+    </div>
+</div>
 
-        <div id="register-form" style="display: none;">
-            <h2 class="auth-title">Créer un profil</h2>
-            <form action="{{ url_for('auth.register') }}" method="POST">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <input type="text" name="full_name" placeholder="Nom complet" required>
-                <input type="text" name="username" placeholder="Nom d'utilisateur" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="text" name="phone" placeholder="Numéro de téléphone">
-                <input type="password" name="password" placeholder="Mot de passe" required>
-                <button type="submit" class="btn btn-primary auth-btn">Commencer</button>
-            </form>
-            <p class="auth-switch">
-                Déjà inscrit ?
-                <a href="#" onclick="showLogin()" class="auth-link">Se connecter</a>
-            </p>
+        <iframe
+            src="https://www.google.com/maps?q=35.71298480992203,-0.6043625486008135&z=15&output=embed"
+            width="100%"
+            height="300"
+            style="border:0; border-radius: 1rem; margin-top: 1rem;"
+            allowfullscreen=""
+            loading="lazy">
+        </iframe>
+    </div>
+</section>
+
+    <div id="auth-section" class="auth-shell" style="display: none;">
+        <div class="auth-layout">
+            <div class="auth-panel auth-panel-left">
+                <div class="auth-badge">Espace patient sécurisé</div>
+                <h2 class="auth-hero-title">Bienvenue chez Taha NutriCare</h2>
+                <p class="auth-hero-text">
+                    Connectez-vous à votre espace personnel pour suivre votre programme nutritionnel,
+                    consulter vos informations et démarrer votre accompagnement en toute sécurité.
+                </p>
+
+                <div class="auth-benefits">
+                    <div class="auth-benefit">
+                        <span class="auth-benefit-icon">✓</span>
+                        <span>Suivi nutritionnel personnalisé</span>
+                    </div>
+                    <div class="auth-benefit">
+                        <span class="auth-benefit-icon">✓</span>
+                        <span>Accès rapide à votre profil</span>
+                    </div>
+                    <div class="auth-benefit">
+                        <span class="auth-benefit-icon">✓</span>
+                        <span>Données confidentielles et protégées</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-panel auth-panel-right">
+                <div id="login-form" class="auth-card-clean">
+                    <div class="auth-card-head">
+                        <h2 class="auth-title" >Connexion</h2>
+                    </div>
+
+                    <form action="{{ url_for('auth.login') }}" method="POST" class="auth-form-clean">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                        <div class="form-group">
+                            <input id="login-username" type="text" name="username"
+                                placeholder="Entrez votre nom d'utilisateur" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input id="login-password" type="password" name="password"
+                                placeholder="Entrez votre mot de passe" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary auth-btn-clean">Se connecter</button>
+                    </form>
+
+                    <p class="auth-switch-clean">
+                        Pas encore de compte ?
+                        <a href="#" onclick="showRegister(); return false;" class="auth-link">Créer un compte</a>
+                    </p>
+                </div>
+
+                <div id="register-form" class="auth-card-clean" style="display: none;">
+                    <div class="auth-card-head">
+                        <h2 class="auth-title">Créer un profil</h2>
+                    </div>
+
+                    <form action="{{ url_for('auth.register') }}" method="POST" class="auth-form-clean">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                        <div class="form-group">
+                            <input id="register-fullname" type="text" name="full_name"
+                                placeholder="Entrez votre nom complet" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input id="register-username" type="text" name="username"
+                                placeholder="Choisissez un nom d'utilisateur" required>
+                        </div>
+
+                        <div class="form-group">
+                            <input id="register-email" type="email" name="email" placeholder="Entrez votre email"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <input id="register-phone" type="text" name="phone" placeholder="Numéro de téléphone">
+                        </div>
+
+                        <div class="form-group">
+                            <input id="register-password" type="password" name="password"
+                                placeholder="Créez un mot de passe" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary auth-btn-clean">Créer mon compte</button>
+                    </form>
+
+                    <p class="auth-switch-clean">
+                        Déjà inscrit ?
+                        <a href="#" onclick="showLogin(); return false;" class="auth-link">Se connecter</a>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<script>
-    let currentSlide = 0;
-    const totalSlides = 3;
+<style>
+    @media (max-width: 900px) {
 
-    function updateSlider() {
-        for(let i=0; i<totalSlides; i++) {
-            document.getElementById('slide-' + i).style.display = 'none';
-            document.getElementById('dot-' + i).style.background = '#e2e8f0';
+        .services-grid-custom,
+        .why-grid-custom {
+            grid-template-columns: 1fr !important;
         }
-        document.getElementById('slide-' + currentSlide).style.display = 'block';
-        
-        let color = 'var(--primary)';
-        if(currentSlide === 1) color = 'var(--accent-blue)';
-        if(currentSlide === 2) color = 'var(--secondary)';
-        document.getElementById('dot-' + currentSlide).style.background = color;
     }
 
-    function prevSlide() {
-        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-        updateSlider();
-    }
+    @media (max-width: 768px) {
+        .top-nav-links {
+            width: 100%;
+            justify-content: center;
+        }
 
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % totalSlides;
-        updateSlider();
+        section#accueil {
+            padding: 1.5rem !important;
+            min-height: 380px !important;
+        }
     }
+</style>
 
-    function selectCurrentObjective() {
-        const objText = document.getElementById('slide-' + currentSlide).getAttribute('data-value');
-        selectObjective(objText);
-    }
-
-    function selectObjective(obj) {
-        localStorage.setItem('temp_objective', obj);
-        showRegister();
-    }
-
+<script>
     function showRegister() {
-        document.getElementById('step-1').style.display = 'none';
         document.getElementById('auth-section').style.display = 'block';
         document.getElementById('login-form').style.display = 'none';
         document.getElementById('register-form').style.display = 'block';
+        document.getElementById('auth-section').scrollIntoView({ behavior: 'smooth' });
     }
 
     function showLogin() {
-        document.getElementById('step-1').style.display = 'none';
         document.getElementById('auth-section').style.display = 'block';
         document.getElementById('register-form').style.display = 'none';
         document.getElementById('login-form').style.display = 'block';
+        document.getElementById('auth-section').scrollIntoView({ behavior: 'smooth' });
     }
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-        document.addEventListener('DOMContentLoaded', showLogin);
+    document.addEventListener('DOMContentLoaded', showLogin);
     {% endif %}
     {% endwith %}
+</script>
+<style>
+    .hero-top {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        padding: 0.9rem 1.5rem;
+    }
+
+    .onboarding-container {
+        padding-top: 90px;
+    }
+
+    .fixed-header {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        margin-bottom: 0 !important;
+        padding: 0.9rem 1.5rem;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    /* =========================
+   AUTH UI PREMIUM / CLINIQUE
+========================= */
+
+    .auth-shell {
+        margin-top: 2.5rem;
+    }
+
+    .auth-layout {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+
+    .auth-panel {
+        border-radius: 1.75rem;
+    }
+
+    .auth-panel-left {
+        padding: 2.25rem;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(240, 253, 244, 0.96));
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 35px rgba(15, 23, 42, 0.06);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .auth-badge {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        padding: 0.5rem 0.9rem;
+        border-radius: 999px;
+        background: #f0fdf4;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+        font-size: 0.88rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .auth-hero-title {
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+        line-height: 1.08;
+        font-weight: 900;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+    }
+
+    .auth-hero-text {
+        color: var(--text-muted);
+        line-height: 1.8;
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        max-width: 520px;
+    }
+
+    .auth-benefits {
+        display: grid;
+        gap: 0.85rem;
+    }
+
+    .auth-benefit {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .auth-benefit-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: #dcfce7;
+        color: #16a34a;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+
+    .auth-panel-right {
+        display: flex;
+        align-items: stretch;
+    }
+
+    .auth-card-clean {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid var(--border);
+        border-radius: 1.75rem;
+        padding: 2rem;
+        box-shadow: 0 24px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    .auth-card-head {
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+
+    .auth-icon-box {
+        width: 54px;
+        height: 54px;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        box-shadow: inset 0 0 0 1px #bbf7d0;
+    }
+
+    .auth-title {
+        font-size: 1.8rem;
+        line-height: 1.1;
+        font-weight: 900;
+        color: var(--text-dark);
+        margin-bottom: 0.35rem;
+    }
+
+    .auth-subtitle {
+        color: var(--text-muted);
+        font-size: 0.98rem;
+        margin: 0;
+    }
+
+    .auth-form-clean {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .form-group {
+        display: grid;
+        gap: 0.45rem;
+    }
+
+    .form-group label {
+        margin: 0;
+        font-size: 0.94rem;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .auth-form-clean input {
+        width: 100%;
+        padding: 0.95rem 1rem;
+        border: 1px solid #dbe4ea;
+        border-radius: 1rem;
+        background: #ffffff;
+        color: var(--text-dark);
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .auth-form-clean input::placeholder {
+        color: #94a3b8;
+    }
+
+    .auth-form-clean input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+    }
+
+    .auth-btn-clean {
+        width: 100%;
+        margin-top: 0.35rem;
+        min-height: 52px;
+        border-radius: 1rem;
+        font-size: 1rem;
+        font-weight: 800;
+        box-shadow: 0 14px 24px rgba(34, 197, 94, 0.16);
+    }
+
+    .auth-switch-clean {
+        margin-top: 1.2rem;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+    }
+
+    .auth-link {
+        color: var(--primary);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .auth-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+        .auth-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-panel-left {
+            padding: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        .auth-card-clean,
+        .auth-panel-left {
+            border-radius: 1.25rem;
+            padding: 1.25rem;
+        }
+
+        .auth-title {
+            font-size: 1.5rem;
+        }
+
+        .auth-hero-title {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
 </script>
 {% endblock %}

@@ -31,11 +31,21 @@ def onboarding():
                 height=request.form.get('height'),
                 gender=request.form.get('gender'),
                 objective=request.form.get('objective'),
-                activity_level=request.form.get('activity_level')
+                activity_level=request.form.get('activity_level'),
+                profession=request.form.get('profession'),
+                ville=request.form.get('ville'),
+                mode_de_vie=request.form.get('mode_de_vie'),
+                preference=request.form.get('preference'),
+                liked_recipes=request.form.get('liked_recipes'),
+                disliked_recipes=request.form.get('disliked_recipes'),
+                meals_per_day=request.form.get('meals_per_day'),
+                waist_size=request.form.get('waist_size') or None,
+                allergies=request.form.get('allergies'),
+                remarks=request.form.get('remarks')
             )
             ClinicService.update_patient_profile(current_user.id, data)
             return redirect(url_for('patient.dashboard'))
-        except ValidationError:
+        except ValidationError as e:
             flash("Données d'onboarding invalides")
             
     profile = PatientProfile.query.filter_by(user_id=current_user.id).first()
@@ -70,7 +80,17 @@ def profile():
                 current_weight=request.form.get('current_weight'),
                 target_weight=request.form.get('target_weight'),
                 height=request.form.get('height'),
-                activity_level=request.form.get('activity_level')
+                activity_level=request.form.get('activity_level'),
+                profession=request.form.get('profession'),
+                ville=request.form.get('ville'),
+                mode_de_vie=request.form.get('mode_de_vie'),
+                preference=request.form.get('preference'),
+                liked_recipes=request.form.get('liked_recipes'),
+                disliked_recipes=request.form.get('disliked_recipes'),
+                meals_per_day=request.form.get('meals_per_day'),
+                waist_size=request.form.get('waist_size') or None,
+                allergies=request.form.get('allergies'),
+                remarks=request.form.get('remarks')
             )
             ClinicService.update_patient_profile(current_user.id, data)
             flash('Profil mis à jour avec succès !')

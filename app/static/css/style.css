@@ -1,5 +1,5 @@
 :root {
-    --primary: #22c55e;
+    --primary: #38742d;
     --primary-hover: #16a34a;
     --bg-light: #f8fafc;
     --card-bg: #ffffff;
@@ -627,21 +627,7 @@ main.with-sidebar {
     font-weight: 600;
 }
 
-@media (max-width: 900px) {
-    .hero-top {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-    }
 
-    .objective-cards {
-        grid-template-columns: 1fr;
-    }
-
-    .hero-title {
-        font-size: 2.2rem;
-    }
-}
 .onboarding-container {
     max-width: 1220px;
     margin: 0 auto;
@@ -667,7 +653,7 @@ main.with-sidebar {
 
 .brand-title {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.7rem;
     font-weight: 800;
     color: var(--primary);
 }
@@ -701,3 +687,512 @@ main.with-sidebar {
 .objective-option {
     padding: 1.5rem 1rem;
 }
+
+/* =========================================
+   MOBILE / TABLET RESPONSIVE CLEANUP
+   À placer tout en bas du fichier CSS
+========================================= */
+
+:root {
+    --bottom-nav-height: 74px;
+}
+
+/* Tablette */
+@media (max-width: 1024px) {
+    aside {
+        width: 260px;
+    }
+
+    main.with-sidebar,
+    .main-content {
+        margin-left: 260px;
+        padding: 1.5rem;
+    }
+
+    .stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .objective-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .messenger-container {
+        height: calc(100vh - 120px);
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden;
+    }
+
+    body {
+        display: block;
+    }
+
+    .app-container {
+        display: block;
+    }
+
+    /* Sidebar -> bottom nav */
+    aside,
+    aside.sidebar,
+    .sidebar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+        width: 100%;
+        height: var(--bottom-nav-height);
+        padding: 0.35rem 0 calc(0.35rem + env(safe-area-inset-bottom));
+        border-right: none;
+        border-top: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(12px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        z-index: 1000;
+        box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .logo-section,
+    .sidebar > div:last-child {
+        display: none;
+    }
+
+    .nav-menu {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        align-items: center;
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.2rem;
+        padding: 0.45rem 0.25rem;
+        margin: 0;
+        border-radius: 0;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        min-height: 60px;
+    }
+
+    .nav-item img,
+    .nav-item svg {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+    }
+
+    .nav-item.active,
+    .nav-item:hover {
+        background: transparent;
+        color: var(--primary);
+    }
+
+    /* Contenu principal */
+    main,
+    main.with-sidebar,
+    .main-content {
+        margin-left: 0 !important;
+        padding: 1rem 1rem calc(var(--bottom-nav-height) + 1.5rem) !important;
+        width: 100%;
+    }
+
+    .onboarding-container {
+        padding: 0.5rem 0 1rem;
+        margin: 0 auto;
+    }
+
+    .hero-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-title {
+        font-size: 1.75rem;
+        line-height: 1.15;
+        text-align: left;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+        text-align: left;
+    }
+
+    .step-card,
+    .card,
+    .auth-card {
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    .objective-cards {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+
+    .objective-option {
+        padding: 1.1rem;
+        border-radius: 1rem;
+        text-align: left;
+    }
+
+    .objective-title {
+        font-size: 1.2rem;
+    }
+
+    .objective-emoji {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-grid {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+        margin: 1rem 0;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Formulaires */
+    input,
+    textarea,
+    select,
+    .input-field {
+        font-size: 16px; /* évite le zoom iPhone */
+        padding: 0.85rem 0.95rem;
+    }
+
+    textarea {
+        min-height: 110px;
+    }
+
+    /* Messenger */
+    .messenger-container {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        min-height: auto;
+        border-radius: 1rem;
+    }
+
+    .contacts-sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: 240px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        background: white;
+    }
+
+    .contact-item {
+        padding: 1rem;
+    }
+
+    .chat-window {
+        min-height: 420px;
+        height: auto;
+    }
+
+    .chat-header {
+        padding: 1rem;
+        gap: 0.75rem;
+    }
+
+    .chat-messages {
+        padding: 1rem;
+        gap: 0.75rem;
+    }
+
+    .message-bubble {
+        max-width: 88%;
+        font-size: 0.9rem;
+        padding: 0.7rem 1rem;
+    }
+
+    .chat-input-area {
+        padding: 0.85rem 1rem;
+        gap: 0.6rem;
+    }
+
+    /* Calendrier / repas */
+    .calendar-nav {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .day-item {
+        padding: 0.65rem 0.4rem;
+        font-size: 0.82rem;
+        border-radius: 0.85rem;
+    }
+
+    .meal-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.85rem;
+        padding: 1rem;
+    }
+
+    .meal-img {
+        width: 100%;
+        height: 160px;
+        border-radius: 1rem;
+    }
+}
+
+/* Très petits écrans */
+@media (max-width: 480px) {
+    :root {
+        --bottom-nav-height: 68px;
+    }
+
+    .hero-title {
+        font-size: 1.45rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .nav-item {
+        font-size: 0;
+        gap: 0;
+    }
+
+    .nav-item img,
+    .nav-item svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .message-bubble {
+        max-width: 92%;
+    }
+
+    .chat-window {
+        min-height: 380px;
+    }
+
+    .contacts-sidebar {
+        height: 210px;
+    }
+
+    .meal-img {
+        height: 140px;
+    }
+}
+
+/* =========================
+   FIX MOBILE PROPRE
+========================= */
+@media (max-width: 768px) {
+    html, body {
+        overflow-x: hidden;
+    }
+
+    body {
+        display: block;
+    }
+
+    .app-container {
+        display: block;
+        width: 100%;
+    }
+
+    /* Sidebar en bas */
+    aside,
+    aside.sidebar,
+    .sidebar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+        width: 100%;
+        height: 72px;
+        padding: 0.35rem 0 calc(0.35rem + env(safe-area-inset-bottom));
+        background: #fff;
+        border-top: 1px solid var(--border);
+        border-right: none;
+        z-index: 1000;
+        overflow: hidden;
+    }
+
+    .logo-section,
+    .sidebar > div:last-child {
+        display: none;
+    }
+
+    .nav-menu {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 0.2rem;
+        padding: 0.35rem 0.2rem;
+        font-size: 0.65rem;
+        margin: 0;
+    }
+
+    .nav-item img,
+    .nav-item svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    main,
+    main.with-sidebar,
+    .main-content {
+        margin-left: 0 !important;
+        width: 100%;
+        padding: 1rem 1rem 100px 1rem !important;
+    }
+
+    /* Toutes les sections principales en 1 colonne */
+    .stat-grid,
+    .objective-cards {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Si tu as une grille dashboard/custom */
+    .dashboard-grid,
+    .home-grid,
+    .content-grid,
+    .meal-dashboard,
+    .nutrition-grid {
+        display: grid;
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+
+    .card,
+    .step-card,
+    .auth-card {
+        width: 100%;
+        min-width: 0;
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    /* Cartes type repas / conseils / résumé */
+    .meal-row,
+    .meal-card,
+    .summary-card,
+    .advice-card,
+    .tips-card,
+    .macro-card {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* Corrige le bouton qui déborde */
+    .btn,
+    .btn-primary {
+        width: 100%;
+        max-width: 100%;
+        white-space: normal;
+        word-break: break-word;
+        text-align: center;
+        padding: 0.8rem 1rem;
+    }
+
+    /* Texte long dans les cartes */
+    h1, h2, h3, h4, h5, h6,
+    p, span, a, button, div {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Images */
+    .meal-img,
+    .card img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Messenger */
+    .messenger-container {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        min-height: 0;
+    }
+
+    .contacts-sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: 220px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .chat-window {
+        min-height: 380px;
+        height: auto;
+    }
+
+    .chat-messages {
+        min-height: 220px;
+    }
+
+    /* Inputs */
+    input,
+    textarea,
+    select,
+    .input-field {
+        font-size: 16px;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .card {
+        overflow: hidden;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .progress-bar,
+    .progress-fill {
+        max-width: 100%;
+    }
+}
+

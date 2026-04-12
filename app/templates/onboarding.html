@@ -2,73 +2,163 @@
 
 {% block content %}
 <div class="onboarding-container">
-    <div class="step-card" style="text-align: left; max-width: 600px; margin: 0 auto;">
-        <h2 style="margin-bottom: 0.5rem; color: var(--primary);">Parlez-nous de vous</h2>
-        <p style="color: var(--text-muted); margin-bottom: 2rem;">Ces informations aideront le Dr. Taha à personnaliser votre programme.</p>
-        
+    <div class="step-card" style="text-align: left; max-width: 650px; margin: 0 auto;">
+        <h2 style="margin-bottom: 0.35rem; color: var(--primary); font-size: 1.5rem;">Parlez-nous de vous</h2>
+        <p style="color: var(--text-muted); margin-bottom: 1.75rem; font-size: 0.95rem;">Ces informations aideront Dr. Taha à personnaliser votre programme.</p>
+
         <form action="{{ url_for('patient.profile') if edit_mode else url_for('patient.onboarding') }}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            {% if edit_mode %}
-            <div style="margin-bottom: 1rem;">
-                <label style="font-size: 0.8rem; font-weight: 600;">Objectif de santé</label>
-                <input type="text" id="objective_input" class="input-field" name="objective" value="{{ profile.objective or '' }}" required>
-            </div>
-            {% else %}
-            <input type="hidden" id="objective_input" name="objective">
-            {% endif %}
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div>
-                    <label style="font-size: 0.8rem; font-weight: 600;">Âge</label>
-                    <input type="number" name="age" class="input-field" placeholder="Ex: 25" value="{{ profile.age if edit_mode else '' }}" required>
-                </div>
-                <div>
-                    <label style="font-size: 0.8rem; font-weight: 600;">Genre</label>
-                    <select name="gender" class="input-field">
-                        <option value="Homme" {{ 'selected' if edit_mode and profile.gender == 'Homme' else '' }}>Homme</option>
-                        <option value="Femme" {{ 'selected' if edit_mode and profile.gender == 'Femme' else '' }}>Femme</option>
-                        <option value="Autre" {{ 'selected' if edit_mode and profile.gender == 'Autre' else '' }}>Autre</option>
-                    </select>
+            <input type="hidden" id="objective_input" name="objective" value="{{ profile.objective or '' }}">
+
+            <!-- Section 1 : Identité -->
+            <div style="margin-bottom: 1.5rem;">
+                <h3 style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 1rem;">📋 Informations personnelles</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>Nom complet</label>
+                        <input type="text" name="full_name" class="input-field" placeholder="Votre nom" value="{{ current_user.full_name or '' }}">
+                    </div>
+                    <div>
+                        <label>Âge <span style="color:var(--accent-red)">*</span></label>
+                        <input type="number" name="age" class="input-field" placeholder="Ex: 28" value="{{ profile.age if profile and profile.age else '' }}" required>
+                    </div>
+                    <div>
+                        <label>Sexe <span style="color:var(--accent-red)">*</span></label>
+                        <select name="gender" class="input-field" required>
+                            <option value="">Choisir...</option>
+                            <option value="Homme" {{ 'selected' if profile and profile.gender == 'Homme' }}>Homme</option>
+                            <option value="Femme" {{ 'selected' if profile and profile.gender == 'Femme' }}>Femme</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Profession <span style="color:var(--accent-red)">*</span></label>
+                        <input type="text" name="profession" class="input-field" placeholder="Ex: Enseignant, Informaticien..." value="{{ profile.profession or '' if profile else '' }}" required>
+                    </div>
+                    <div>
+                        <label>Ville <span style="color:var(--accent-red)">*</span></label>
+                        <input type="text" name="ville" class="input-field" placeholder="Ex: Alger, Oran..." value="{{ profile.ville or '' if profile else '' }}" required>
+                    </div>
+                    <div>
+                        <label>Mode de vie <span style="color:var(--accent-red)">*</span></label>
+                        <select name="mode_de_vie" class="input-field" required>
+                            <option value="">Choisir...</option>
+                            <option value="Sédentaire" {{ 'selected' if profile and profile.mode_de_vie == 'Sédentaire' }}>Sédentaire</option>
+                            <option value="Légèrement actif" {{ 'selected' if profile and profile.mode_de_vie == 'Légèrement actif' }}>Légèrement actif</option>
+                            <option value="Modérément actif" {{ 'selected' if profile and profile.mode_de_vie == 'Modérément actif' }}>Modérément actif</option>
+                            <option value="Très actif" {{ 'selected' if profile and profile.mode_de_vie == 'Très actif' }}>Très actif</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div>
-                    <label style="font-size: 0.8rem; font-weight: 600;">Poids actuel (kg)</label>
-                    <input type="number" step="0.1" name="current_weight" class="input-field" placeholder="70.5" value="{{ profile.current_weight if edit_mode else '' }}" required>
+            <!-- Section 2 : Mensurations -->
+            <div style="margin-bottom: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem;">
+                <h3 style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 1rem;">⚖️ Données physiques</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>Quel est votre poids ? (kg) <span style="color:var(--accent-red)">*</span></label>
+                        <input type="number" step="0.1" name="current_weight" class="input-field" placeholder="Ex: 75.5" value="{{ profile.current_weight if profile and profile.current_weight else '' }}" required>
+                    </div>
+                    <div>
+                        <label>Poids cible (kg)</label>
+                        <input type="number" step="0.1" name="target_weight" class="input-field" placeholder="Ex: 68.0" value="{{ profile.target_weight if profile and profile.target_weight else '' }}">
+                    </div>
+                    <div>
+                        <label>Quelle est votre taille ? (cm) <span style="color:var(--accent-red)">*</span></label>
+                        <input type="number" name="height" class="input-field" placeholder="Ex: 170" value="{{ profile.height if profile and profile.height else '' }}" required>
+                    </div>
+                    <div>
+                        <label>Tour de taille (cm)</label>
+                        <input type="number" step="0.1" name="waist_size" class="input-field" placeholder="Ex: 85.0 (optionnel)" value="{{ profile.waist_size if profile and profile.waist_size else '' }}">
+                    </div>
                 </div>
-                <div>
-                    <label style="font-size: 0.8rem; font-weight: 600;">Poids cible (kg)</label>
-                    <input type="number" step="0.1" name="target_weight" class="input-field" placeholder="65.0" value="{{ profile.target_weight if edit_mode else '' }}">
+            </div>
+
+            <!-- Section 3 : Objectifs & Activité -->
+            <div style="margin-bottom: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem;">
+                <h3 style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 1rem;">🎯 Objectifs & Activité</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>Objectifs nutritionnels <span style="color:var(--accent-red)">*</span></label>
+                        <select name="objective" id="objective_select" class="input-field" required>
+                            <option value="">Choisir...</option>
+                            <option value="Perte de Poids" {{ 'selected' if profile and profile.objective == 'Perte de Poids' }}>Perte de Poids</option>
+                            <option value="Prise de Masse" {{ 'selected' if profile and profile.objective == 'Prise de Masse' }}>Prise de Masse</option>
+                            <option value="Stabilisation" {{ 'selected' if profile and profile.objective == 'Stabilisation' }}>Stabilisation</option>
+                            <option value="Manger Sainement" {{ 'selected' if profile and profile.objective == 'Manger Sainement' }}>Manger Sainement</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Niveau d'activité physique <span style="color:var(--accent-red)">*</span></label>
+                        <select name="activity_level" class="input-field" required>
+                            <option value="">Choisir...</option>
+                            <option value="Sédentaire" {{ 'selected' if profile and profile.activity_level == 'Sédentaire' }}>Sédentaire (peu ou pas de sport)</option>
+                            <option value="Léger" {{ 'selected' if profile and profile.activity_level == 'Léger' }}>Léger (1-3 j/semaine)</option>
+                            <option value="Modéré" {{ 'selected' if profile and profile.activity_level == 'Modéré' }}>Modéré (3-5 j/semaine)</option>
+                            <option value="Intense" {{ 'selected' if profile and profile.activity_level == 'Intense' }}>Intense (6-7 j/semaine)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Quelle est votre préférence alimentaire ? <span style="color:var(--accent-red)">*</span></label>
+                        <select name="preference" class="input-field" required>
+                            <option value="">Choisir...</option>
+                            <option value="Omnivore" {{ 'selected' if profile and profile.preference == 'Omnivore' }}>Omnivore (tout)</option>
+                            <option value="Végétarien" {{ 'selected' if profile and profile.preference == 'Végétarien' }}>Végétarien</option>
+                            <option value="Végétalien" {{ 'selected' if profile and profile.preference == 'Végétalien' }}>Végétalien / Vegan</option>
+                            <option value="Halal" {{ 'selected' if profile and profile.preference == 'Halal' }}>Halal</option>
+                            <option value="Sans Gluten" {{ 'selected' if profile and profile.preference == 'Sans Gluten' }}>Sans Gluten</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Combien de repas mangez-vous par jour ? <span style="color:var(--accent-red)">*</span></label>
+                        <select name="meals_per_day" class="input-field" required>
+                            <option value="">Choisir...</option>
+                            {% for n in range(1, 8) %}
+                            <option value="{{ n }}" {{ 'selected' if profile and profile.meals_per_day == n }}>{{ n }} repas par jour</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div>
-                <label style="font-size: 0.8rem; font-weight: 600;">Taille (cm)</label>
-                <input type="number" name="height" class="input-field" placeholder="175" value="{{ profile.height if edit_mode else '' }}" required>
+            <!-- Section 4 : Recettes & Santé -->
+            <div style="margin-bottom: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem;">
+                <h3 style="font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 1rem;">🍽️ Préférences culinaires</h3>
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div>
+                        <label>Les recettes que vous aimez (ex: Soupe, Pizza, Couscous…) <span style="color:var(--accent-red)">*</span></label>
+                        <textarea name="liked_recipes" class="input-field" placeholder="Ex: Couscous, Grillades, Salade orientale..." style="min-height: 80px;" required>{{ profile.liked_recipes or '' if profile else '' }}</textarea>
+                    </div>
+                    <div>
+                        <label>Les recettes que vous n'aimez pas (ex: Soupe, Poisson…) <span style="color:var(--accent-red)">*</span></label>
+                        <textarea name="disliked_recipes" class="input-field" placeholder="Ex: Foie, Sardines, Brocoli..." style="min-height: 80px;" required>{{ profile.disliked_recipes or '' if profile else '' }}</textarea>
+                    </div>
+                    <div>
+                        <label>Allergies alimentaires</label>
+                        <input type="text" name="allergies" class="input-field" placeholder="Ex: Arachides, Lactose, Gluten... (optionnel)" value="{{ profile.allergies or '' if profile else '' }}">
+                    </div>
+                    <div>
+                        <label>Remarques supplémentaires</label>
+                        <textarea name="remarks" class="input-field" placeholder="Infos particulières à signaler au médecin..." style="min-height: 80px;">{{ profile.remarks or '' if profile else '' }}</textarea>
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <label style="font-size: 0.8rem; font-weight: 600;">Niveau d'activité</label>
-                <select name="activity_level" class="input-field">
-                    <option value="Sédentaire" {{ 'selected' if edit_mode and profile.activity_level == 'Sédentaire' else '' }}>Sédentaire (Bureau, peu de sport)</option>
-                    <option value="Légèrement actif" {{ 'selected' if edit_mode and profile.activity_level == 'Légèrement actif' else '' }}>Légèrement actif (1-3 j/semaine)</option>
-                    <option value="Modérément actif" {{ 'selected' if edit_mode and profile.activity_level == 'Modérément actif' else '' }}>Modérément actif (3-5 j/semaine)</option>
-                    <option value="Très actif" {{ 'selected' if edit_mode and profile.activity_level == 'Très actif' else '' }}>Très actif (6-7 j/semaine)</option>
-                </select>
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">{{ 'Mettre à jour mon profil' if edit_mode else "Terminer l'inscription" }}</button>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; font-size: 1rem; padding: 0.9rem;">
+                {{ 'Mettre à jour mon profil' if edit_mode else "Terminer l'inscription ✓" }}
+            </button>
         </form>
     </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const obj = localStorage.getItem('temp_objective');
-    if (obj) {
-        document.getElementById('objective_input').value = obj;
-    }
-});
+// Sync the hidden objective_input with the select (only on non-edit mode)
+const objSelect = document.getElementById('objective_select');
+const objInput = document.getElementById('objective_input');
+if (objSelect && objInput) {
+    objSelect.addEventListener('change', () => { objInput.value = objSelect.value; });
+    // Init
+    if (objSelect.value) objInput.value = objSelect.value;
+}
 </script>
 {% endblock %}

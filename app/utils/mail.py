@@ -5,10 +5,13 @@ from datetime import datetime, timedelta
 from app.models import db
 
 def send_otp_email(user, mail):
-    otp = str(random.randint(100000, 999999))
-    user.otp_code = otp
-    user.otp_expiry = datetime.utcnow() + timedelta(minutes=10)
-    db.session.commit()
+    if user.otp_code and user.otp_expiry and datetime.utcnow() < user.otp_expiry:
+        otp = user.otp_code
+    else:
+        otp = str(random.randint(100000, 999999))
+        user.otp_code = otp
+        user.otp_expiry = datetime.utcnow() + timedelta(minutes=10)
+        db.session.commit()
     
     msg = MailMessage("Votre code de vérification - Clinique Taha",
                   recipients=[user.email])

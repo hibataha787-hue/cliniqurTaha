@@ -30,6 +30,16 @@ class PatientProfileUpdate(BaseModel):
     gender: Optional[str] = None
     objective: Optional[str] = None
     activity_level: Optional[str] = None
+    profession: Optional[str] = None
+    ville: Optional[str] = None
+    mode_de_vie: Optional[str] = None
+    preference: Optional[str] = None
+    liked_recipes: Optional[str] = None
+    disliked_recipes: Optional[str] = None
+    meals_per_day: Optional[int] = Field(None, ge=1, le=10)
+    waist_size: Optional[float] = Field(None, ge=0)
+    allergies: Optional[str] = None
+    remarks: Optional[str] = None
 
 class MealAssign(BaseModel):
     patient_id: int

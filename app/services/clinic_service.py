@@ -23,13 +23,23 @@ class ClinicService:
     def update_patient_profile(user_id, data):
         profile = PatientProfile.query.filter_by(user_id=user_id).first()
         if profile:
-            if data.objective: profile.objective = data.objective
-            if data.age: profile.age = data.age
-            if data.gender: profile.gender = data.gender
-            if data.current_weight: profile.current_weight = data.current_weight
-            if data.target_weight: profile.target_weight = data.target_weight
-            if data.height: profile.height = data.height
-            if data.activity_level: profile.activity_level = data.activity_level
+            if data.objective is not None: profile.objective = data.objective
+            if data.age is not None: profile.age = data.age
+            if data.gender is not None: profile.gender = data.gender
+            if data.current_weight is not None: profile.current_weight = data.current_weight
+            if data.target_weight is not None: profile.target_weight = data.target_weight
+            if data.height is not None: profile.height = data.height
+            if data.activity_level is not None: profile.activity_level = data.activity_level
+            if data.profession is not None: profile.profession = data.profession
+            if data.ville is not None: profile.ville = data.ville
+            if data.mode_de_vie is not None: profile.mode_de_vie = data.mode_de_vie
+            if data.preference is not None: profile.preference = data.preference
+            if data.liked_recipes is not None: profile.liked_recipes = data.liked_recipes
+            if data.disliked_recipes is not None: profile.disliked_recipes = data.disliked_recipes
+            if data.meals_per_day is not None: profile.meals_per_day = data.meals_per_day
+            if data.waist_size is not None: profile.waist_size = data.waist_size
+            if data.allergies is not None: profile.allergies = data.allergies
+            if data.remarks is not None: profile.remarks = data.remarks
             db.session.commit()
 
     @staticmethod
