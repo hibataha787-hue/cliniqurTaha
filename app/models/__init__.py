@@ -1,9 +1,7 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from datetime import datetime
-
-db = SQLAlchemy()
+from app.extensions import db
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -15,6 +13,9 @@ class User(db.Model, UserMixin):
     full_name = db.Column(db.String(100))
     profile = db.relationship('PatientProfile', backref='user', lazy=True)
     received_messages = db.relationship('Message', backref='receiver', primaryjoin='User.id==Message.receiver_id', lazy=True)
+    otp_code = db.Column(db.String(6))
+    otp_expiry = db.Column(db.DateTime)
+    is_2fa_enabled = db.Column(db.Boolean, default=False)
 
 class PatientProfile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -65,3 +66,11 @@ class AssignedMeal(db.Model):
     carbs = db.Column(db.Integer)
     fats = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class AuditLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    action = db.Column(db.String(100), nullable=False)
+    details = db.Column(db.Text)
+    ip_address = db.Column(db.String(45))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)

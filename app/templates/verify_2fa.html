@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="onboarding-container" style="max-width: 400px; margin-top: 5rem;">
+    <div class="step-card auth-card">
+        <h2 class="auth-title">Vérification de sécurité</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">
+            Un code de vérification à 6 chiffres a été envoyé à votre adresse email.
+        </p>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div style="margin-bottom: 1.5rem;">
+                <input type="text" name="otp_code" placeholder="Code (ex: 123456)" 
+                       required maxlength="6" pattern="\d{6}"
+                       style="text-align: center; font-size: 2rem; letter-spacing: 0.5rem;">
+            </div>
+            <button type="submit" class="btn btn-primary auth-btn">Vérifier</button>
+        </form>
+
+        <p class="auth-switch">
+            Vous n'avez pas reçu le code ? 
+            <a href="{{ url_for('auth.login') }}" class="auth-link">Réessayer</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

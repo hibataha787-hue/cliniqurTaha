@@ -16,7 +16,7 @@
         {% set days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'] %}
         {% set active_day = request.args.get('day', 'Lundi') %}
         {% for d in days %}
-        <a href="{{ url_for('patient_meals', day=d) }}" class="day-item {{ 'active' if active_day == d else '' }}" style="text-decoration: none; color: inherit; flex: 1; text-align: center;">
+        <a href="{{ url_for('patient.meals', day=d) }}" class="day-item {{ 'active' if active_day == d else '' }}" style="text-decoration: none; color: inherit; flex: 1; text-align: center;">
             {{ d[:3]|upper }}
         </a>
         {% endfor %}
@@ -78,7 +78,7 @@
             <p style="font-size: 0.85rem; color: var(--text-dark); margin-bottom: 1.5rem;">Votre nutritionniste a mis à jour votre plan pour la phase de stabilisation.</p>
             
            
-            <a href="{{ url_for('patient_program') }}" class="btn" style="width: 100%; margin-top: 1.5rem; border: 1px solid var(--primary); color: var(--primary); text-align: center; text-decoration: none; font-size: 0.85rem;">Voir les conseils complets</a>
+            <a href="{{ url_for('patient.program') }}" class="btn" style="width: 100%; margin-top: 1.5rem; border: 1px solid var(--primary); color: var(--primary); text-align: center; text-decoration: none; font-size: 0.85rem;">Voir les conseils complets</a>
         </div>
 
         <div class="card">

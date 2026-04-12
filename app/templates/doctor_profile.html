@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="onboarding-container" style="max-width: 600px; margin-top: 5rem;">
+    <div class="step-card">
+        <h2 style="color: var(--primary); font-weight: 800; margin-bottom: 2rem;">Gestion du Profil Médecin</h2>
+        
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Nom complet</label>
+                <input type="text" name="full_name" value="{{ user.full_name }}" required>
+            </div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Email (utilisé pour la 2FA)</label>
+                <input type="email" name="email" value="{{ user.email }}" required>
+            </div>
+            
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">Nouveau mot de passe (laisser vide pour ne pas changer)</label>
+                <input type="password" name="password" placeholder="••••••••">
+            </div>
+            
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-primary" style="flex: 1; padding: 1rem;">Sauvegarder les modifications</button>
+                <a href="{{ url_for('doctor.dashboard') }}" class="btn" style="flex: 1; text-align: center; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;">Retour au tableau de bord</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

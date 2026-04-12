@@ -6,7 +6,8 @@
         <h2 style="margin-bottom: 0.5rem; color: var(--primary);">Parlez-nous de vous</h2>
         <p style="color: var(--text-muted); margin-bottom: 2rem;">Ces informations aideront le Dr. Taha à personnaliser votre programme.</p>
         
-        <form action="{{ url_for('patient_profile') if edit_mode else url_for('onboarding') }}" method="POST">
+        <form action="{{ url_for('patient.profile') if edit_mode else url_for('patient.onboarding') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             {% if edit_mode %}
             <div style="margin-bottom: 1rem;">
                 <label style="font-size: 0.8rem; font-weight: 600;">Objectif de santé</label>

@@ -13,7 +13,7 @@
         </div>
         <div class="contact-list">
             {% for c in contacts %}
-            <div class="contact-item {{ 'active' if contact and c.id == contact.id else '' }}" onclick="window.location.href='{{ url_for('messages', contact_id=c.id) }}'">
+            <div class="contact-item {{ 'active' if contact and c.id == contact.id else '' }}" onclick="window.location.href='{{ url_for('patient.messages', contact_id=c.id) }}'">
                 <div >
                     <div style="width: 45px; height: 45px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center;">
                         <img src="https://api.iconify.design/lucide:user.svg?color=white" width="24" height="24">
@@ -101,7 +101,10 @@ function sendMessage() {
 
     fetch('/api/send_message', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token() }}'
+        },
         body: JSON.stringify({
             receiver_id: receiverId,
             content: content

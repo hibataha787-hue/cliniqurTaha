@@ -12,7 +12,7 @@
         <div class="card" style="margin-bottom: 1.5rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h3 style="font-weight: 800;">Programme du Jour ({{ today_str }})</h3>
-                <a href="{{ url_for('patient_meals') }}" style="font-size: 0.8rem; color: var(--primary); font-weight: 700; text-decoration: none;">Voir menu complet →</a>
+                <a href="{{ url_for('patient.meals') }}" style="font-size: 0.8rem; color: var(--primary); font-weight: 700; text-decoration: none;">Voir menu complet →</a>
             </div>
             
             {% set day_meals = assigned_meals | selectattr('day_of_week', 'equalto', today_str) | list %}
@@ -91,8 +91,8 @@
         <!-- Quick Actions -->
         <div class="card" style="background: var(--primary); color: white; margin-bottom: 1.5rem; border: none;">
             <h3 style="margin-bottom: 1rem; color: white;">Suivi Rapide</h3>
-            <button onclick="window.location.href='{{ url_for('patient_meals') }}'" class="btn" style="width: 100%; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 0.75rem; font-weight: 700;">Voir les Repas</button>
-            <button onclick="window.location.href='{{ url_for('patient_program') }}'" class="btn" style="width: 100%; background: white; color: var(--primary); border: none; font-weight: 700;">Voir les conseils</button>
+            <button onclick="window.location.href='{{ url_for('patient.meals') }}'" class="btn" style="width: 100%; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 0.75rem; font-weight: 700;">Voir les Repas</button>
+            <button onclick="window.location.href='{{ url_for('patient.program') }}'" class="btn" style="width: 100%; background: white; color: var(--primary); border: none; font-weight: 700;">Voir les conseils</button>
         </div>
 
         <!-- Message Preview -->
@@ -105,7 +105,7 @@
                 {% endif %}
             </div>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Discutez avec votre nutritionniste pour ajuster votre plan.</p>
-            <a href="{{ url_for('messages') }}" class="btn" style="width: 100%; border: 1px solid var(--border); text-align: center; text-decoration: none; color: var(--text-dark); font-weight: 700;">Ouvrir la messagerie</a>
+            <a href="{{ url_for('patient.messages') }}" class="btn" style="width: 100%; border: 1px solid var(--border); text-align: center; text-decoration: none; color: var(--text-dark); font-weight: 700;">Ouvrir la messagerie</a>
         </div>
     </div>
 </div>

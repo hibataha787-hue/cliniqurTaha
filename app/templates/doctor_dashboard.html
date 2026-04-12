@@ -47,11 +47,6 @@
                             </div>
                         </div>
                     </td>
-                    <td style="padding: 1rem;">
-                        <span style="padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 700; background: {{ '#f0fdf4' if 'Sainement' in (patient.profile[0].objective if patient.profile else '') else '#eff6ff' if 'Masse' in (patient.profile[0].objective if patient.profile else '') else '#fef2f2' }}; color: {{ '#16a34a' if 'Sainement' in (patient.profile[0].objective if patient.profile else '') else '#2563eb' if 'Masse' in (patient.profile[0].objective if patient.profile else '') else '#dc2626' }};">
-                            {{ patient.profile[0].objective if patient.profile else 'N/A' }}
-                        </span>
-                    </td>
                     <td style="padding: 1rem; color: var(--text-muted); font-size: 0.9rem;">Aujourd'hui, 14:20</td>
                     <td style="padding: 1rem;">
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -60,7 +55,7 @@
                         </div>
                     </td>
                     <td style="padding: 1rem; text-align: right;">
-                        <a href="{{ url_for('patient_details', patient_id=patient.id) }}" class="btn" style="padding: 0.5rem 0.75rem; border: 1px solid var(--border); font-size: 0.8rem; text-decoration: none; color: var(--text-dark);">Gérer</a>
+                        <a href="{{ url_for('doctor.patient_details', patient_id=patient.id) }}" class="btn" style="padding: 0.5rem 0.75rem; border: 1px solid var(--border); font-size: 0.8rem; text-decoration: none; color: var(--text-dark);">Gérer</a>
                     </td>
                 </tr>
                 {% endfor %}

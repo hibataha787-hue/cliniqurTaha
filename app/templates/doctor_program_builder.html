@@ -1,73 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div style="margin-bottom: 2rem;">
-    <a href="{{ url_for('doctor_dashboard') }}" style="color: var(--primary); text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
-        <img src="https://api.iconify.design/lucide:arrow-left.svg?color=%2322c55e" width="20" height="20">
-        Retour au tableau de bord
-    </a>
-</div>
-
-<!-- Header Card: Profile Info -->
-<div class="card" style="margin-bottom: 2rem; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;">
-    <div style="width: 80px; height: 80px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-        <img src="https://api.iconify.design/lucide:user.svg" width="40" height="40">
-    </div>
-    <div style="flex: 1; min-width: 250px;">
-        <h2 style="font-weight: 800; font-size: 1.5rem; margin-bottom: 0.25rem;">{{ patient.full_name }}</h2>
-        <p style="color: var(--text-muted); margin-bottom: 0.5rem;">{{ patient.email }}</p>
-        <div style="font-weight: 700; color: var(--primary); display: inline-block; background: #f0fdf4; padding: 0.25rem 0.75rem; border-radius: 2rem; font-size: 0.85rem;">
-            Objectif : {{ profile.objective }}
-        </div>
-    </div>
-    <div style="display: flex; gap: 2rem; text-align: center; border-left: 1px solid var(--border); padding-left: 2rem;">
-        <div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.25rem;">ÂGE</div>
-            <div style="font-weight: 800; font-size: 1.25rem;">{{ profile.age or '?' }}</div>
-        </div>
-        <div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.25rem;">GENRE</div>
-            <div style="font-weight: 800; font-size: 1.25rem;">{{ profile.gender or '?' }}</div>
-        </div>
-        <div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.25rem;">POIDS</div>
-            <div style="font-weight: 800; font-size: 1.25rem;">{{ profile.current_weight or '?' }} kg</div>
-        </div>
-        <div>
-            <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.25rem;">CIBLE</div>
-            <div style="font-weight: 800; font-size: 1.25rem;">{{ profile.target_weight or '?' }} kg</div>
-        </div>
+<div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: flex-end;">
+    <div>
+        <a href="{{ url_for('doctor.patient_details', patient_id=patient.id) }}" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem; display: inline-block;">← Retour au dossier</a>
+        <h1 style="font-size: 1.75rem; font-weight: 800; color: var(--text-dark);">Programme de {{ patient.full_name or patient.username }}</h1>
+        <p style="color: var(--text-muted);">Construisez le plan nutritionnel semaine type du patient.</p>
     </div>
 </div>
 
-<!-- Tabs Navigation -->
-<div style="display: flex; gap: 2rem; border-bottom: 2px solid var(--border); margin-bottom: 2rem;">
-    <button onclick="switchTab('tab-conseils')" id="btn-conseils" style="background: none; border: none; font-size: 1rem; font-weight: 700; padding-bottom: 1rem; cursor: pointer; color: var(--primary); border-bottom: 3px solid var(--primary); margin-bottom: -2px;">📝 Conseils Globaux</button>
-    <button onclick="switchTab('tab-menu')" id="btn-menu" style="background: none; border: none; font-size: 1rem; font-weight: 700; padding-bottom: 1rem; cursor: pointer; color: var(--text-muted); padding-left: 0; padding-right: 0; margin-bottom: -2px;">🥗 Menu Hebdomadaire</button>
-</div>
-
-<!-- Tab Content: Conseils Globaux -->
-<div id="tab-conseils" style="display: block;">
-    <div class="card">
-        <h3 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
-            <img src="https://api.iconify.design/lucide:clipboard-list.svg?color=%2322c55e" width="24" height="24">
-           Vos  Notes
-        </h3>
-        <form action="{{ url_for('save_plan') }}" method="POST">
-            <input type="hidden" name="patient_id" value="{{ patient.id }}">
-            <textarea name="program_details" class="input-field" style="height: 100px; width: 100%; resize: none; margin-bottom: 1.5rem; font-size: 1rem;" placeholder="Rédigez ici des conseils pour le patient et le programme alimentaire proposé.">{{ plan.program_details if plan else '' }}</textarea>
-            
-            <div style="display: flex; gap: 1rem;">
-                <button type="submit" class="btn btn-primary" style=" width: auto;">Enregistrer les Conseils</button>
-
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Tab Content: Menu Hebdomadaire -->
-<div id="tab-menu" style="display: none;">
-<div class="grid" style="display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5rem;">    <!-- Formulaire d'ajout -->
+<div class="grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem;">
+    <!-- Formulaire d'ajout -->
     <div class="card">
         <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">Ajouter un repas au plan</h3>
         
@@ -95,16 +38,10 @@
                     </select>
                 </div>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
 
-            <div >
+            <div style="margin-bottom: 1rem;">
                 <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Titre du repas</label>
                 <input type="text" id="title" class="input-field" placeholder="Ex: Avocado Toast & Œuf Poché" required>
-            </div>
-            <div >
-                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Photo (URL optionnelle)</label>
-                <input type="url" id="photo_url" class="input-field" placeholder="https://...">
-            </div>
             </div>
 
             <div style="margin-bottom: 1rem;">
@@ -112,7 +49,10 @@
                 <textarea id="ingredients" class="input-field" rows="4" placeholder="Détaillez les ingrédients..." required></textarea>
             </div>
 
-            
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem;">Photo (URL optionnelle)</label>
+                <input type="url" id="photo_url" class="input-field" placeholder="https://...">
+            </div>
 
             <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--text-dark);">Macronutriments</h4>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
@@ -145,7 +85,7 @@
     <div class="card" style="background: #f8fafc;">
         <h3 style="margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">Aperçu du Programme Hebdomadaire</h3>
         
-        <div style="max-height: 450px; overflow-y: auto;">
+        <div style="max-height: 800px; overflow-y: auto;">
             {% set days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'] %}
             {% for day in days %}
                 <div style="margin-bottom: 2rem;">
@@ -172,7 +112,7 @@
                                 <div style="flex: 1;">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
                                         <span style="font-size: 0.75rem; font-weight: 800; color: var(--primary); text-transform: uppercase;">{{ meal.meal_type }}</span>
-                                        <button data-meal-id="{{ meal.id }}" onclick="deleteMeal(this.getAttribute('data-meal-id'))" style="background: none; border: none; cursor: pointer; color: #ef4444;" title="Supprimer">
+                                        <button onclick="deleteMeal({{ meal.id }})" style="background: none; border: none; cursor: pointer; color: #ef4444;" title="Supprimer">
                                             <img src="https://api.iconify.design/lucide:trash-2.svg?color=%23ef4444" width="16" height="16">
                                         </button>
                                     </div>
@@ -193,26 +133,9 @@
             {% endfor %}
         </div>
     </div>
-    </div>
 </div>
 
 <script>
-function switchTab(tabId) {
-    document.getElementById('tab-conseils').style.display = 'none';
-    document.getElementById('tab-menu').style.display = 'none';
-    
-    document.getElementById('btn-conseils').style.borderBottom = 'none';
-    document.getElementById('btn-conseils').style.color = 'var(--text-muted)';
-    
-    document.getElementById('btn-menu').style.borderBottom = 'none';
-    document.getElementById('btn-menu').style.color = 'var(--text-muted)';
-    
-    document.getElementById(tabId).style.display = 'block';
-    const activeBtn = document.getElementById(tabId === 'tab-conseils' ? 'btn-conseils' : 'btn-menu');
-    activeBtn.style.borderBottom = '3px solid var(--primary)';
-    activeBtn.style.color = 'var(--primary)';
-}
-
 function assignMeal() {
     const mealForm = document.getElementById('mealForm');
     const data = {

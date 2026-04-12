@@ -1,6 +1,8 @@
 import threading
 import webview
-from app import app
+from app import create_app
+
+app = create_app()
 
 def run_flask():
     app.run(debug=False, use_reloader=False)

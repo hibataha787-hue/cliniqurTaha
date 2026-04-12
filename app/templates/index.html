@@ -69,7 +69,8 @@
     <div id="auth-section" class="step-card auth-card" style="display: none;">
         <div id="login-form">
             <h2 class="auth-title">Heureux de vous revoir</h2>
-            <form action="{{ url_for('login') }}" method="POST">
+            <form action="{{ url_for('auth.login') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="text" name="username" placeholder="Nom d'utilisateur" required>
                 <input type="password" name="password" placeholder="Mot de passe" required>
                 <button type="submit" class="btn btn-primary auth-btn">Se connecter</button>
@@ -82,7 +83,8 @@
 
         <div id="register-form" style="display: none;">
             <h2 class="auth-title">Créer un profil</h2>
-            <form action="{{ url_for('register') }}" method="POST">
+            <form action="{{ url_for('auth.register') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="text" name="full_name" placeholder="Nom complet" required>
                 <input type="text" name="username" placeholder="Nom d'utilisateur" required>
                 <input type="email" name="email" placeholder="Email" required>
@@ -148,5 +150,11 @@
         document.getElementById('register-form').style.display = 'none';
         document.getElementById('login-form').style.display = 'block';
     }
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        document.addEventListener('DOMContentLoaded', showLogin);
+    {% endif %}
+    {% endwith %}
 </script>
 {% endblock %}
