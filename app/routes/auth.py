@@ -29,7 +29,7 @@ def login():
             if result['status'] == '2fa_required':
                 session['temp_user_id'] = result['user_id']
                 flash('Un code de vérification a été envoyé à votre email.')
-                return redirect(url_for('patient.dashboard'))
+                return redirect(url_for('auth.verify_2fa'))
             
             if result['status'] == 'success':
                 if result['role'] == 'doctor':
@@ -65,7 +65,7 @@ def verify_2fa():
         except ValidationError:
             flash("Format de code invalide (6 chiffres)")
             
-    return render_template('doctor.dashboard')
+    return render_template('verify_2fa.html')
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
