@@ -7,9 +7,10 @@
             <h1 style="font-size: 1.75rem; font-weight: 800;">Mon Profil</h1>
             <p style="color: var(--text-muted);">Consultez et gérez vos informations personnelles.</p>
         </div>
-            <img src="https://api.iconify.design/lucide:pencil.svg?color=white" width="18" height="18">
-            Modifier mon Profil
-        </a>
+          <a href="{{ url_for('patient.profile', edit=1) }}" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
+    <img src="https://api.iconify.design/lucide:pencil.svg?color=white" width="18" height="18">
+    Modifier mon Profil
+</a>
     </div>
 
     <!-- Informations Générales -->
@@ -89,5 +90,186 @@
             {{ profile.activity_level or 'Non renseigné' }}
         </div>
     </div>
+
+    <div id="tab-analyse">
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h3 style="margin-bottom: 1.25rem; font-size: 1rem;">Vos Données</h3>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+      <div>
+        <label style="font-size: 0.8rem;">Poids actuel (kg)</label>
+        <input id="a_poids" type="number" step="0.1" class="input-field" value="{{ profile.current_weight or '' }}">
+      </div>
+      <div>
+        <label style="font-size: 0.8rem;">Taille (cm)</label>
+        <input id="a_taille" type="number" class="input-field" value="{{ profile.height or '' }}">
+      </div>
+      <div>
+        <label style="font-size: 0.8rem;">Âge</label>
+        <input id="a_age" type="number" class="input-field" value="{{ profile.age or '' }}">
+      </div>
+      <div>
+        <label style="font-size: 0.8rem;">Sexe</label>
+        <select id="a_sexe" class="input-field">
+          <option value="Homme" {{ 'selected' if profile.gender == 'Homme' }}>Homme</option>
+          <option value="Femme" {{ 'selected' if profile.gender == 'Femme' }}>Femme</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size: 0.8rem;">Poids cible (kg)</label>
+        <input id="a_cible" type="number" step="0.1" class="input-field" value="{{ profile.target_weight or '' }}">
+      </div>
+      <div>
+        <label style="font-size: 0.8rem;">Niveau d'activité</label>
+        <select id="a_activite" class="input-field">
+          <option value="1.2" {{ 'selected' if profile.activity_level == 'Sédentaire' }}>Sédentaire (×1.2)</option>
+          <option value="1.375" {{ 'selected' if profile.activity_level == 'Léger' }}>Léger (×1.375)</option>
+          <option value="1.55" {{ 'selected' if profile.activity_level == 'Modéré' }}>Modéré (×1.55)</option>
+          <option value="1.725" {{ 'selected' if profile.activity_level == 'Intense' }}>Intense (×1.725)</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size: 0.8rem;">Objectif</label>
+        <select id="a_objectif" class="input-field">
+          <option value="perte" {{ 'selected' if profile.objective == 'Perte de Poids' }}>Perte de Poids</option>
+          <option value="stabilisation" {{ 'selected' if profile.objective == 'Stabilisation' }}>Stabilisation</option>
+          <option value="prise" {{ 'selected' if profile.objective == 'Prise de Masse' }}>Prise de Masse</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size: 0.8rem;">Tour de taille (cm)</label>
+        <input id="a_tour" type="number" step="0.1" class="input-field" value="{{ profile.waist_size or '' }}" placeholder="Optionnel">
+      </div>
+      <div style="display: flex; align-items: flex-end;">
+        <button onclick="calculerAnalyse()" class="btn btn-primary" style="width: 100%;">Calculer</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="analyse-results" style="display:none;">
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.5rem;">
+      <div class="card" style="text-align: center; border-top: 4px solid var(--primary);">
+        <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">IMC</div>
+        <div id="res_imc" style="font-size: 2rem; font-weight: 800; color: var(--primary);">-</div>
+        <div id="res_imc_cat" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">-</div>
+      </div>
+      <div class="card" style="text-align: center; border-top: 4px solid var(--accent-blue);">
+        <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">Métabolisme de Base</div>
+        <div id="res_mb" style="font-size: 2rem; font-weight: 800; color: var(--accent-blue);">-</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted);">kcal/jour</div>
+      </div>
+      <div class="card" style="text-align: center; border-top: 4px solid var(--accent-orange);">
+        <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">Besoin Calorique (TDEE)</div>
+        <div id="res_tdee" style="font-size: 2rem; font-weight: 800; color: var(--accent-orange);">-</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted);">kcal/jour</div>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.5rem;">
+      <div class="card" style="text-align: center;">
+        <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">Calories Recommandées</div>
+        <div id="res_cal" style="font-size: 1.6rem; font-weight: 800;">-</div>
+        <div id="res_cal_note" style="font-size: 0.8rem; color: var(--text-muted);">kcal/jour</div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">Poids Idéal</div>
+        <div id="res_poids_ideal" style="font-size: 1.2rem; font-weight: 800;">-</div>
+        <div style="font-size: 0.75rem; color: var(--text-muted);">fourchette IMC 18.5-24.9</div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">Objectif de Poids</div>
+        <div id="res_diff" style="font-size: 1.6rem; font-weight: 800;">-</div>
+        <div id="res_diff_note" style="font-size: 0.8rem; color: var(--text-muted);">-</div>
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="margin-bottom: 1rem;">📝 Notes médicales</h4>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div><label style="font-size:0.8rem;">Allergies</label>
+          <div style="background:#f8fafc;padding:0.75rem;border-radius:0.75rem;font-size:0.9rem;min-height:50px;">{{ profile.allergies or '—' }}</div>
+        </div>
+        <div><label style="font-size:0.8rem;">Remarques</label>
+          <div style="background:#f8fafc;padding:0.75rem;border-radius:0.75rem;font-size:0.9rem;min-height:50px;">{{ profile.remarks or '—' }}</div>
+        </div>
+        <div><label style="font-size:0.8rem;">Préférences alimentaires</label>
+          <div style="background:#f8fafc;padding:0.75rem;border-radius:0.75rem;font-size:0.9rem;">{{ profile.preference or '—' }}</div>
+        </div>
+        <div><label style="font-size:0.8rem;">Tour de taille</label>
+          <div style="background:#f8fafc;padding:0.75rem;border-radius:0.75rem;font-size:0.9rem;">{{ (profile.waist_size|string + ' cm') if profile.waist_size else '—' }}</div>
+        </div>
+      </div>
+      <div style="margin-top:1rem;border-top:1px solid var(--border);padding-top:1rem;">
+        <p style="font-size:0.85rem;margin-bottom:0.5rem;">🍽️ <strong>Aime:</strong> {{ profile.liked_recipes or '—' }}</p>
+        <p style="font-size:0.85rem;">🚫 <strong>N'aime pas:</strong> {{ profile.disliked_recipes or '—' }}</p>
+      </div>
+    </div>
+  </div>
 </div>
+</div>
+<script>
+    function calculerAnalyse() {
+    const poids = parseFloat(document.getElementById('a_poids').value);
+    const taille_cm = parseFloat(document.getElementById('a_taille').value);
+    const age = parseInt(document.getElementById('a_age').value);
+    const sexe = document.getElementById('a_sexe').value;
+    const cible = parseFloat(document.getElementById('a_cible').value);
+    const facteur = parseFloat(document.getElementById('a_activite').value);
+    const objectif = document.getElementById('a_objectif').value;
+
+    if (!poids || !taille_cm || !age) { alert('Veuillez remplir Poids, Taille et Âge.'); return; }
+
+    const taille_m = taille_cm / 100;
+    // 1 - IMC
+    const imc = poids / (taille_m * taille_m);
+    let imcCat = '';
+    if (imc < 18.5) imcCat = '🟡 Insuffisance pondérale';
+    else if (imc < 25) imcCat = '🟢 Corpulence normale';
+    else if (imc < 30) imcCat = '🟠 Surpoids';
+    else imcCat = '🔴 Obésité';
+    document.getElementById('res_imc').textContent = imc.toFixed(2);
+    document.getElementById('res_imc_cat').textContent = imcCat;
+
+    // 2 - Poids idéal
+    const poidsMin = (18.5 * taille_m * taille_m).toFixed(1);
+    const poidsMax = (24.9 * taille_m * taille_m).toFixed(1);
+    document.getElementById('res_poids_ideal').textContent = poidsMin + ' – ' + poidsMax + ' kg';
+
+    // 3 - MB (Mifflin-St Jeor)
+    let mb;
+    if (sexe === 'Homme') mb = (10 * poids) + (6.25 * taille_cm) - (5 * age) + 5;
+    else mb = (10 * poids) + (6.25 * taille_cm) - (5 * age) - 161;
+    document.getElementById('res_mb').textContent = Math.round(mb);
+
+    // 4 - TDEE
+    const tdee = mb * facteur;
+    document.getElementById('res_tdee').textContent = Math.round(tdee);
+
+    // 5 - Calories recommandées
+    let cal, calNote;
+    if (objectif === 'perte') { cal = tdee - 400; calNote = 'Déficit -400 kcal (perte de poids)'; }
+    else if (objectif === 'prise') { cal = tdee + 250; calNote = 'Surplus +250 kcal (prise de masse)'; }
+    else { cal = tdee; calNote = 'Maintien du poids actuel'; }
+    document.getElementById('res_cal').textContent = Math.round(cal);
+    document.getElementById('res_cal_note').textContent = calNote;
+
+    // 6 - Différence de poids
+    if (!isNaN(cible)) {
+        const diff = poids - cible;
+        if (diff > 0) {
+            document.getElementById('res_diff').textContent = '-' + diff.toFixed(1) + ' kg';
+            document.getElementById('res_diff_note').textContent = 'À perdre';
+        } else if (diff < 0) {
+            document.getElementById('res_diff').textContent = '+' + Math.abs(diff).toFixed(1) + ' kg';
+            document.getElementById('res_diff_note').textContent = 'À prendre';
+        } else {
+            document.getElementById('res_diff').textContent = 'Objectif atteint ✅';
+            document.getElementById('res_diff_note').textContent = 'Poids actuel = poids cible';
+        }
+    } else {
+        document.getElementById('res_diff').textContent = '—';
+        document.getElementById('res_diff_note').textContent = 'Aucun poids cible';
+    }
+
+    document.getElementById('analyse-results').style.display = 'block';
+}
+
+</script>
 {% endblock %}

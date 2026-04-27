@@ -25,11 +25,9 @@ class PatientProfile(db.Model):
     target_weight = db.Column(db.Float)
     height = db.Column(db.Float)
     gender = db.Column(db.String(10))
-    objective = db.Column(db.String(50)) # 'Perte de Poids', 'Prise de Masse', 'Manger Sainement'
+    objective = db.Column(db.String(50))
     activity_level = db.Column(db.String(50))
-    health_metrics = db.Column(db.Text) # JSON string
-    
-    # Nouveaux champs d'onboarding
+    health_metrics = db.Column(db.Text) 
     profession = db.Column(db.String(100))
     ville = db.Column(db.String(100))
     mode_de_vie = db.Column(db.String(100))
@@ -68,8 +66,8 @@ class AssignedMeal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     patient_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     doctor_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    day_of_week = db.Column(db.String(20)) # Lundi, Mardi, etc.
-    meal_type = db.Column(db.String(50)) # Petit-déjeuner, Déjeuner, Dîner, Collation
+    day_of_week = db.Column(db.String(20))
+    meal_type = db.Column(db.String(50))
     title = db.Column(db.String(200))
     ingredients = db.Column(db.Text)
     photo_url = db.Column(db.String(500))
